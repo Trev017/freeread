@@ -14,6 +14,7 @@ class DownloadsPage extends StatefulWidget {
 class _MyDownloadsPageState extends State<DownloadsPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  //Temporary method used for displaying books in FutureBuilder
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -41,13 +42,13 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
+          //Vertical list builder
           child: FutureBuilder(
               future: getRequest(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
                   return Container(
                     child: const Center(
-                      //child: CircularProgressIndicator(),
                       child: Text("Database currently not available"),
                     ),
                   );
@@ -62,8 +63,6 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                           contentPadding: const EdgeInsets.only(bottom: 5),
                           shape: ContinuousRectangleBorder(side: BorderSide(color: Colors.black),),
                         ),
-                        //subtitle: Text(snapshot.data[index]['description']),
-                        //contentPadding: const EdgeInsets.only(bottom: 20),
                       ),
                     ),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

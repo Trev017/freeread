@@ -13,6 +13,7 @@ class GenresListPage extends StatefulWidget {
 
 class _MyGenresListPage extends State<GenresListPage> {
 
+  //Temporary view
   @override
   Widget build(BuildContext context) {
     return Scaffold(

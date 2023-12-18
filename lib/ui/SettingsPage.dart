@@ -22,6 +22,7 @@ class _MySettingsPage extends State<SettingsPage> {
         padding: const EdgeInsets.all(80),
         child: Column(
           children: [
+            //Navigates to the language settings page
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -36,6 +37,7 @@ class _MySettingsPage extends State<SettingsPage> {
               ),
             ),
             const Spacer(),
+            //Navigates to the appearance settings page
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -50,6 +52,7 @@ class _MySettingsPage extends State<SettingsPage> {
               ),
             ),
             const Spacer(),
+            //Opens an alert box on how to contact the developer
             Center(
               child: ElevatedButton(
                 onPressed: () {

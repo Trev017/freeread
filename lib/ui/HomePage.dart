@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 class _MyHomePageState extends State<HomePage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  //Temporary method used for displaying books in FutureBuilder
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -46,6 +47,7 @@ class _MyHomePageState extends State<HomePage> {
               Container(
                   child: Column(
                     children: [
+                      //Navigates to the downloads page
                       Row(
                         children: [
                           Text("Your Downloads"),
@@ -68,10 +70,10 @@ class _MyHomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
+                      //Horizontal list builder
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          //
                           Expanded(
                               child: SizedBox.square(
                                 dimension: 100,
@@ -106,7 +108,6 @@ class _MyHomePageState extends State<HomePage> {
                                 ),
                               )
                           )
-                          //
                         ],
                       ),
                     ],
@@ -115,6 +116,7 @@ class _MyHomePageState extends State<HomePage> {
               Container(
                   child: Column(
                     children: [
+                      //Navigates to the favorites page
                       Row(
                         children: [
                           Text("Your Favorites"),
@@ -140,7 +142,7 @@ class _MyHomePageState extends State<HomePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          //
+                          //Horizontal list builder
                           Expanded(
                               child: SizedBox.square(
                                 dimension: 100,
@@ -175,7 +177,6 @@ class _MyHomePageState extends State<HomePage> {
                                 ),
                               )
                           )
-                          //
                         ],
                       ),
                     ],

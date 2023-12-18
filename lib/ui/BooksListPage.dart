@@ -41,6 +41,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
+          //Vertical list builder
           child: FutureBuilder(
               future: getRequest(),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {

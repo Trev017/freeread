@@ -14,6 +14,7 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int currentPageIndex = 0;
+  //Setter for the minimum height of the miniplayer
   double minPlayerMinHeight = 60;
 
   @override
@@ -21,20 +22,24 @@ class _NavBarState extends State<NavBar> {
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         destinations: const <Widget>[
+          //Navigates to the home page
           NavigationDestination(
               selectedIcon: Icon(Icons.home),
               icon: Icon(Icons.home_outlined),
               label: 'Home'
           ),
+          //Navigates to the catalog page
           NavigationDestination(
               icon: Icon(Icons.menu_book),
               label: 'Catalog',
           ),
+          //Navigates to the search page
           NavigationDestination(
               selectedIcon: Icon(Icons.search),
               icon: Icon(Icons.search),
               label: 'Search',
           ),
+          //Navigates to the settings page
           NavigationDestination(
               selectedIcon: Icon(Icons.settings),
               icon: Icon(Icons.settings_outlined),
@@ -48,6 +53,7 @@ class _NavBarState extends State<NavBar> {
           });
         },
       ),
+      //Sets navigation to the intended pages
       body: Stack(
         children: [
           Offstage(

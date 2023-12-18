@@ -14,6 +14,7 @@ class FavoritesPage extends StatefulWidget {
 class _MyFavoritesPageState extends State<FavoritesPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  //Temporary method used for displaying books in FutureBuilder
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -41,13 +42,13 @@ class _MyFavoritesPageState extends State<FavoritesPage> {
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
+          //Vertical list builder
           child: FutureBuilder(
                   future: getRequest(),
                   builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                     if (snapshot.data == null) {
                       return Container(
                         child: const Center(
-                          //child: CircularProgressIndicator(),
                           child: Text("Database currently not available"),
                         ),
                       );

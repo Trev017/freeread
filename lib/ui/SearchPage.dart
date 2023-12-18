@@ -16,13 +16,13 @@ class _MySearchPage extends State<SearchPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
   String searchText = "";
-
+  //Method to perform a GET request to initially build a list
   Future getBooksRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
-
+  //Method to perform a GET request with a specified query
   Future getBooksbyTitleRequest(String q) async {
     String s = onlineService.booksUrl;
     final rp = await dio.get("$s&title=^$q");
@@ -74,7 +74,6 @@ class _MySearchPage extends State<SearchPage> {
               )),
           Expanded(
             child: FutureBuilder(
-              //future: getBooksRequest(),
               future: getBooksbyTitleRequest(searchText),
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
@@ -89,9 +88,11 @@ class _MySearchPage extends State<SearchPage> {
                           }
                         }),
                   );
+                  //Displays if search result is incorrect
                 } else if (snapshot.hasError) {
                   return Center(
                       child: Text("No results"));
+                  //Displays if connection is unavailable
                 } else if (snapshot.data == null) {
                   return Center(child: Text("Database currently not available"));
                 }

@@ -18,8 +18,8 @@ class _MyAudioplayerPageState extends State<Audioplayer> {
       ),
       backgroundColor: Colors.yellow.shade100,
       body: Padding(
+        //Builds view for the audioplayer
         padding: const EdgeInsets.all(20),
-        //
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -28,7 +28,6 @@ class _MyAudioplayerPageState extends State<Audioplayer> {
             const ProgressBar(progress: Duration.zero, total: Duration(seconds: 5)),
             IconButton(icon: const Icon(Icons.play_arrow), iconSize: 40, onPressed: () {}),
           ],
-          //
         ),
       ),
       resizeToAvoidBottomInset: true,

@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
           useMaterial3: true,
         ),
+        //Creates the base application, begins with the home page
         home: NavBar(),
         debugShowMaterialGrid: false,
         debugShowCheckedModeBanner: false

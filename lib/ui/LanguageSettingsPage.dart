@@ -9,6 +9,7 @@ class LanguageSettingsPage extends StatefulWidget {
 
 class _MyLanguageSettingsPage extends State<LanguageSettingsPage> {
 
+  //Temporary view
   @override
   Widget build(BuildContext context) {
     return Scaffold(

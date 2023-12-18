@@ -13,6 +13,7 @@ class AuthorsListPage extends StatefulWidget {
 
 class _MyAuthorsListPage extends State<AuthorsListPage> {
 
+  //Temporary view
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -9,6 +9,7 @@ class AppearanceSettingsPage extends StatefulWidget {
 
 class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
 
+  //Temporary view
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -18,6 +18,7 @@ class CatalogPage extends StatefulWidget {
 class _MyCatalogPageState extends State<CatalogPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  //Temporary method used for displaying books in FutureBuilder
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -46,6 +47,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
               Container(
                   child: Column(
                     children: [
+                      //Navigates to the downloads page
                       Row(
                         children: [
                           Text("Recommended"),
@@ -68,10 +70,10 @@ class _MyCatalogPageState extends State<CatalogPage> {
                           ),
                         ],
                       ),
+                      //Horizontal list builder
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          //
                           Expanded(
                               child: SizedBox.square(
                                 dimension: 100,
@@ -98,8 +100,6 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                               contentPadding: const EdgeInsets.only(bottom: 5),
                                               shape: ContinuousRectangleBorder(side: BorderSide(color: Colors.black),),
                                             ),
-                                            //subtitle: Text(snapshot.data[index]['description']),
-                                            //contentPadding: const EdgeInsets.only(bottom: 20),
                                           ),
                                         ),
                                       );
@@ -108,13 +108,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                 ),
                               )
                           )
-                          //
                         ],
                       ),
                     ],
                   )
               ),
-              //const Spacer(),
+              //Navigates to the browse all page
               Center(
                 child: OutlinedButton(
                   onPressed: () {
@@ -128,7 +127,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                   child: const Text ("Browse All Books", style: TextStyle(color: Colors.black)),
                 ),
               ),
-              //const Spacer(),
+              //Navigates to the browse authors page
               Center(
                 child: OutlinedButton(
                   onPressed: () {
@@ -142,7 +141,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                   child: const Text ("Browse Authors", style: TextStyle(color: Colors.black)),
                 ),
               ),
-              //const Spacer(),
+              //Navigates to the browse genres page
               Center(
                 child: OutlinedButton(
                   onPressed: () {
