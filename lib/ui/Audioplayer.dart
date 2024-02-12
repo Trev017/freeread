@@ -16,7 +16,7 @@ class _MyAudioplayerPageState extends State<Audioplayer> {
       appBar: AppBar(
         //
       ),
-      backgroundColor: Colors.yellow.shade100,
+      //backgroundColor: Colors.yellow.shade100,
       body: Padding(
         //Builds view for the audioplayer
         padding: const EdgeInsets.all(20),

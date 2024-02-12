@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../main.dart';
 
 class AppearanceSettingsPage extends StatefulWidget {
   const AppearanceSettingsPage({super.key});
@@ -9,7 +10,6 @@ class AppearanceSettingsPage extends StatefulWidget {
 
 class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
 
-  //Temporary view
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,24 +26,32 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
         padding: const EdgeInsets.all(80),
         child: Column(
           children: [
+            //Sets the application's appearance to the current theme of the device
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  //
+                  MyApp.of(context).changeTheme(ThemeMode.system);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: ContinuousRectangleBorder(),
                   backgroundColor: Colors.red.shade100,
                   minimumSize: Size.fromHeight(90),
                 ),
-                child: const Text ("Default System Settings"),
+                child: RichText(
+                  text: const TextSpan(
+                    children: [
+                      TextSpan(text: "Default System Settings", style: TextStyle(color: Colors.black)),
+                    ],
+                  ),
+                ),
               ),
             ),
             const Spacer(),
+            //Sets the application's appearance to light mode
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  //
+                  MyApp.of(context).changeTheme(ThemeMode.light);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: ContinuousRectangleBorder(),
@@ -60,10 +68,11 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
               ),
             ),
             const Spacer(),
+            //Sets the application's appearance to dark mode
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  //
+                  MyApp.of(context).changeTheme(ThemeMode.dark);
                 },
                 style: ElevatedButton.styleFrom(
                   shape: ContinuousRectangleBorder(),

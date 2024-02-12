@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import '../services/OnlineService.dart';
+import '../../services/OnlineService.dart';
 
 class GenresListPage extends StatefulWidget {
   const GenresListPage({super.key});

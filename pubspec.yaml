@@ -54,6 +54,9 @@ dependencies:
   json_annotation: any
   dio: any
   adaptive_navbar: any
+  shared_preferences: any
+  webfeed: any
+  audio_service: any
 
 dev_dependencies:
   flutter_test:

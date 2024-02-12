@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
-import '../services/OnlineService.dart';
+import '../../services/OnlineService.dart';
+import '../BookInformationPage.dart';
 
 class DownloadsPage extends StatefulWidget {
   const DownloadsPage({super.key});
@@ -57,11 +58,33 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                     itemCount: snapshot.data.length,
                     itemBuilder: (ctx, index) => Card(
                       child: SizedBox.square(
-                        dimension: 140,
+                        dimension: 45,
                         child: ListTile(
-                          title: Text(snapshot.data[index]['title']),
-                          contentPadding: const EdgeInsets.only(bottom: 5),
-                          shape: ContinuousRectangleBorder(side: BorderSide(color: Colors.black),),
+                          //
+                          title: ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookInformationPage(
+                                        bookId: snapshot.data[index]['id'],
+                                        bookTitle: snapshot.data[index]['title'],
+                                        bookDescription: snapshot.data[index]['description'],
+                                        bookTotalTime: snapshot.data[index]['totaltimesecs'],
+                                        bookChapters: snapshot.data[index]['sections'],
+                                        bookAuthor: snapshot.data[index]['authors'],
+                                      )
+                                  )
+                              );
+                              },
+                            child: Text(snapshot.data[index]['title']),
+                            style: ElevatedButton.styleFrom(
+                              shape: ContinuousRectangleBorder(),
+                              //backgroundColor: Colors.grey.shade50,
+                              minimumSize: Size.fromHeight(50),
+                            ),
+                          ),
+                          //
                         ),
                       ),
                     ),
