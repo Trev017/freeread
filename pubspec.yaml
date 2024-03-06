@@ -40,6 +40,7 @@ dependencies:
   provider: any
   path_provider: any
   just_audio: any
+  just_audio_windows: any
   audio_video_progress_bar: any
   http: any
   stacked: any

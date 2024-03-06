@@ -1,15 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'AudioProvider.dart';
 
-class Audioplayer extends StatefulWidget {
-  const Audioplayer({super.key});
+class AudioReader extends StatefulWidget {
+  final String? audioBookTitle;
+  final String? audioBookAuthor;
+  final String? audioBookChapter;
+  final int? audioBookDuration;
+
+  const AudioReader({
+    super.key,
+    this.audioBookTitle,
+    this.audioBookAuthor,
+    this.audioBookChapter,
+    this.audioBookDuration,
+  }
+  );
 
   @override
-  State<StatefulWidget> createState() => _MyAudioplayerPageState();
+  State<StatefulWidget> createState() => _MyAudioReaderPageState();
 }
 
-class _MyAudioplayerPageState extends State<Audioplayer> {
+class _MyAudioReaderPageState extends State<AudioReader> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,9 +37,9 @@ class _MyAudioplayerPageState extends State<Audioplayer> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text("Test"),
+            Text(context.watch<AudioProvider>().audioBookTitle ?? "Test"),
             const Spacer(),
-            const ProgressBar(progress: Duration.zero, total: Duration(seconds: 5)),
+            ProgressBar(progress: Duration.zero, total: Duration(seconds: widget.audioBookDuration ?? 5)),
             IconButton(icon: const Icon(Icons.play_arrow), iconSize: 40, onPressed: () {}),
           ],
         ),

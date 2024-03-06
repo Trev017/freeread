@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:webfeed/webfeed.dart';
 import '../services/OnlineService.dart';
+import 'AudioProvider.dart';
+import 'AudioReader.dart';
 
 class BookInformationPage extends StatefulWidget {
   final String bookId;
   final String bookTitle;
   final String bookDescription;
+  final String bookRss;
   final int bookTotalTime;
   final List bookAuthor;
   final List bookChapters;
@@ -19,6 +24,7 @@ class BookInformationPage extends StatefulWidget {
         required this.bookId,
         required this.bookTitle,
         required this.bookDescription,
+        required this.bookRss,
         required this.bookTotalTime,
         required this.bookAuthor,
         required this.bookChapters,
@@ -31,6 +37,7 @@ class BookInformationPage extends StatefulWidget {
 
 class _MyBookInformationPagePage extends State<BookInformationPage> {
   int currentPageIndex = 0;
+  List convertChapterList = [];
 
   String convertTotalSeconds(int x) {
     //String parsedTotalSeconds = int.parse(x);
@@ -46,8 +53,55 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
     return widget.bookAuthor[0]['last_name'];
   }
 
+  //
+  Future<String?> getRssImage() async {
+    final client = http.Client();
+    final response = await client.get(Uri.parse(widget.bookRss));
+    final feed = RssFeed.parse(response.body);
+    final imageUrl = feed.itunes?.image?.href;
+    return imageUrl;
+  }
+  //
+
+  //
+  Future<List> getAudioList() async {
+    await Future.delayed(Duration(seconds: 1));
+    List? mp3List = [];
+    final client = http.Client();
+    final response = await client.get(Uri.parse(widget.bookRss));
+    final feed = RssFeed.parse(response.body);
+    final List? rssList = feed.items;
+    for (int x = 0; x < rssList!.length; x++) {
+      RssItem rssElement = rssList.elementAt(x);
+      var contentElement = rssElement.media?.contents!.elementAt(0);
+      String? mp3url = contentElement?.url;
+      mp3List.add(mp3url);
+    }
+    return mp3List;
+  }
+  //
+  List parseList() {
+    List apiList = [];
+    getAudioList().then((value) {
+      if (value != null) {
+        value.forEach((c) {
+          apiList.add(c);
+        });
+      }
+    });
+    return apiList;
+  }
+  //
+  //
+
   @override
   void initState() {
+    getAudioList().then((value) {
+      if (value is List) {
+        convertChapterList = value;
+      }
+      return convertChapterList;
+    });
     super.initState();
   }
 
@@ -82,6 +136,32 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   String apiChapterSeconds = widget.bookChapters[index]['playtime'];
                   int parsedChapterSeconds = int.parse(apiChapterSeconds);
                   final convertChapterSeconds = Duration(seconds: parsedChapterSeconds);
+
+                  //Future<List> apiChapterList = getAudioList();
+                  //apiChapterList.then((value) => null);
+                  /*
+                  Future<List> apiChapterList = getAudioList().then((value) {
+                    if (value is List) {
+                      convertChapterList = value;
+                    }
+                    return convertChapterList;
+                    /*
+                    return value.forEach((element) {
+                      convertChapterList.add(element);
+                      return convertChapterList;
+                    });
+                    */
+                  });
+                  */
+                  /*
+                  List convertChapterList = [];
+                  List apiChapterList = getAudioList().then((dynamic value) {
+                    List<dynamic> listData = value;
+                    //
+                  });
+                  */
+                  //List apiChapterList = parseList();
+                  //apiChapterList.elementAt(index);
                   return ListTile(
                     title: Text(widget.bookChapters[index]['title']),
                     subtitle: Text('Time to complete: ${convertChapterSeconds.toString()}'),
@@ -91,11 +171,16 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                         IconButton(
                             icon: const Icon(Icons.play_arrow),
                             onPressed: () {
-                              //
+                              context.read<AudioProvider>().setAudioBookAuthor(widget.bookTitle);
+                              /*
+                              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                return AudioReader(audioBookTitle: widget.bookTitle);
+                              }));
+                              */
                             }
                         ),
                         Tooltip(
-                          message: "Download chapter",
+                          message: "Download chapter ${widget.bookChapters[index]['listen_url']}",
                           child: IconButton(
                             icon: Icon(Icons.file_download_outlined),
                             onPressed: () {
@@ -108,6 +193,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   );
                 }
             ),
+            const Spacer(),
           ],
         ),
       ),

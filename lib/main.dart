@@ -2,12 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:miniplayer/miniplayer.dart';
+import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../model/BookModel.dart';
 import 'ui/home/HomePage.dart';
 import '../ui/NavBar.dart';
+import 'ui/AudioProvider.dart';
 
 void main() {
+  //Provider.debugCheckInvalidValueType = null;
   runApp(const MyApp());
 }
 
@@ -33,6 +36,100 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    //
+    return ChangeNotifierProvider(
+      create: (_) {
+        AudioProvider();
+        },
+      child: MaterialApp(
+          title: 'Free Read',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
+            textTheme: TextTheme().apply(
+              bodyColor: Colors.black,
+              displayColor: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                textStyle: TextStyle(color: Colors.black),
+              ),
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
+            useMaterial3: true,
+            textTheme: TextTheme().apply(
+              bodyColor: Colors.lightBlueAccent.shade400,
+              displayColor: Colors.lightBlueAccent.shade400,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.lightBlueAccent.shade400,
+                textStyle: TextStyle(color: Colors.lightBlueAccent.shade400),
+              ),
+            ),
+          ),
+          themeMode: themeMode,
+          //Creates the base application, begins with the home page
+          home: NavBar(),
+          debugShowMaterialGrid: false,
+          debugShowCheckedModeBanner: false
+      ),
+    );
+    //
+    /*
+    return MultiProvider(
+      providers: [
+          ChangeNotifierProvider(create: (_) {
+            AudioProvider();
+          }
+          ),
+      ],
+      child: MaterialApp(
+          title: 'Free Read',
+          theme: ThemeData(
+            brightness: Brightness.light,
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
+            textTheme: TextTheme().apply(
+              bodyColor: Colors.black,
+              displayColor: Colors.black,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.black,
+                textStyle: TextStyle(color: Colors.black),
+              ),
+            ),
+            useMaterial3: true,
+          ),
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+            //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
+            useMaterial3: true,
+            textTheme: TextTheme().apply(
+              bodyColor: Colors.lightBlueAccent.shade400,
+              displayColor: Colors.lightBlueAccent.shade400,
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.lightBlueAccent.shade400,
+                textStyle: TextStyle(color: Colors.lightBlueAccent.shade400),
+              ),
+            ),
+          ),
+          themeMode: themeMode,
+          //Creates the base application, begins with the home page
+          home: NavBar(),
+          debugShowMaterialGrid: false,
+          debugShowCheckedModeBanner: false
+      ),
+    );
+    */
+    /*
     return MaterialApp(
         title: 'Free Read',
         theme: ThemeData(
@@ -71,5 +168,6 @@ class _MyAppState extends State<MyApp> {
         debugShowMaterialGrid: false,
         debugShowCheckedModeBanner: false
     );
+    */
   }
 }

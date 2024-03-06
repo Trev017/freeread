@@ -63,10 +63,10 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                         onPressed: () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendationsPage()));
                                         },
-                                        child: RichText(
-                                          text: const TextSpan(
+                                        child: Text.rich(
+                                          const TextSpan(
                                             children: [
-                                              TextSpan(text: "More",/* style: TextStyle(color: Colors.black)*/),
+                                              TextSpan(text: "More",),
                                               WidgetSpan(child: Icon(Icons.arrow_forward_ios)),
                                             ],
                                           ),
@@ -111,6 +111,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                                                         bookId: snapshot.data[index]['id'],
                                                                         bookTitle: snapshot.data[index]['title'],
                                                                         bookDescription: snapshot.data[index]['description'],
+                                                                        bookRss: snapshot.data[index]['url_rss'],
                                                                         bookTotalTime: snapshot.data[index]['totaltimesecs'],
                                                                         bookChapters: snapshot.data[index]['sections'],
                                                                         bookAuthor: snapshot.data[index]['authors'],

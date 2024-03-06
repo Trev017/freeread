@@ -109,6 +109,7 @@ class _MySearchPage extends State<SearchPage> {
                                                       bookId: snapshot.data[index]['id'],
                                                       bookTitle: snapshot.data[index]['title'],
                                                       bookDescription: snapshot.data[index]['description'],
+                                                      bookRss: snapshot.data[index]['url_rss'],
                                                       bookTotalTime: snapshot.data[index]['totaltimesecs'],
                                                       bookChapters: snapshot.data[index]['sections'],
                                                       bookAuthor: snapshot.data[index]['authors'],
