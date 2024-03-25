@@ -6,14 +6,20 @@ import 'dart:io';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
 
-class BooksListPage extends StatefulWidget {
-  const BooksListPage({super.key});
+class BooksListGenresPage extends StatefulWidget {
+  final String bookGenre;
+  const BooksListGenresPage(
+      {
+        super.key,
+        required this.bookGenre,
+      }
+      );
 
   @override
-  State<BooksListPage> createState() => _MyBooksListPageState();
+  State<BooksListGenresPage> createState() => _MyBooksListGenresPageState();
 }
 
-class _MyBooksListPageState extends State<BooksListPage> {
+class _MyBooksListGenresPageState extends State<BooksListGenresPage> {
   String selectedValue = "Default";
   //String alphaDesc = "Alphabetically (Descending)";
   //String alphaAsc = "Alphabetically (Ascending)";
@@ -30,7 +36,8 @@ class _MyBooksListPageState extends State<BooksListPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
   Future<List<dynamic>> getRequest() async {
-    final rp = await dio.get(onlineService.booksUrl);
+    String s = onlineService.booksUrl;
+    final rp = await dio.get("$s&genre=^${widget.bookGenre}");
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
@@ -56,11 +63,11 @@ class _MyBooksListPageState extends State<BooksListPage> {
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-      //MapEntry<int, dynamic> entryA = a;
-      //MapEntry<int, dynamic> entryB = b;
-      return b.value["title"].compareTo(a.value["title"]);
-      //return a.value.compareTo(b.value);
-    });
+          //MapEntry<int, dynamic> entryA = a;
+          //MapEntry<int, dynamic> entryB = b;
+          return b.value["title"].compareTo(a.value["title"]);
+          //return a.value.compareTo(b.value);
+        });
     return listToSort;
     /*
     listToSort.sort((a, b) {
@@ -82,11 +89,11 @@ class _MyBooksListPageState extends State<BooksListPage> {
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-      //MapEntry<dynamic, dynamic> entryA = a;
-      //MapEntry<dynamic, dynamic> entryB = b;
-      return a.value["title"].compareTo(b.value["title"]);
-      //return a.value.compareTo(b.value);
-    });
+          //MapEntry<dynamic, dynamic> entryA = a;
+          //MapEntry<dynamic, dynamic> entryB = b;
+          return a.value["title"].compareTo(b.value["title"]);
+          //return a.value.compareTo(b.value);
+        });
     return listToSort;
     /*
     listToSort.sort((a, b) {
@@ -106,7 +113,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
     return SafeArea(
       child: Scaffold (
         appBar: AppBar(
-          title: const Text("Browse All", textAlign: TextAlign.center,),
+          title: const Text("Browse Books by Genres", textAlign: TextAlign.center,),
           leading: GestureDetector(
               child: BackButton(),
               onTap: () {
@@ -212,7 +219,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
                                       )
                                   )
                               );
-                              },
+                            },
                             style: ElevatedButton.styleFrom(
                               shape: ContinuousRectangleBorder(),
                               //backgroundColor: Colors.grey.shade50,

@@ -36,11 +36,44 @@ class _MyAudioReaderPageState extends State<AudioReader> {
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(context.watch<AudioProvider>().audioBookTitle ?? "Test"),
             const Spacer(),
             ProgressBar(progress: Duration.zero, total: Duration(seconds: widget.audioBookDuration ?? 5)),
-            IconButton(icon: const Icon(Icons.play_arrow), iconSize: 40, onPressed: () {}),
+            Row(
+              children: [
+                const Spacer(),
+                Center(
+                  child: IconButton(icon: const Icon(Icons.fast_rewind), iconSize: 40, onPressed: () {}),
+                ),
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      IconButton(icon: const Icon(Icons.rotate_left), iconSize: 40, onPressed: () {}),
+                      Text("15"),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: IconButton(icon: const Icon(Icons.play_arrow), iconSize: 40, onPressed: () {}),
+                ),
+                Center(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      IconButton(icon: const Icon(Icons.rotate_right), iconSize: 40, onPressed: () {}),
+                      Text("15"),
+                    ],
+                  ),
+                ),
+                Center(
+                  child: IconButton(icon: const Icon(Icons.fast_forward), iconSize: 40, onPressed: () {}),
+                ),
+                const Spacer(),
+              ],
+            ),
           ],
         ),
       ),

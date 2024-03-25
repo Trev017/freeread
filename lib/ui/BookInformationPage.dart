@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
 import 'package:webfeed/webfeed.dart';
 import '../services/OnlineService.dart';
 import 'AudioProvider.dart';
@@ -38,6 +39,7 @@ class BookInformationPage extends StatefulWidget {
 class _MyBookInformationPagePage extends State<BookInformationPage> {
   int currentPageIndex = 0;
   List convertChapterList = [];
+  var audioprov = null;
 
   String convertTotalSeconds(int x) {
     //String parsedTotalSeconds = int.parse(x);
@@ -162,6 +164,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   */
                   //List apiChapterList = parseList();
                   //apiChapterList.elementAt(index);
+                  audioprov = Provider.of<AudioProvider>(context);
                   return ListTile(
                     title: Text(widget.bookChapters[index]['title']),
                     subtitle: Text('Time to complete: ${convertChapterSeconds.toString()}'),
@@ -171,7 +174,8 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                         IconButton(
                             icon: const Icon(Icons.play_arrow),
                             onPressed: () {
-                              context.read<AudioProvider>().setAudioBookAuthor(widget.bookTitle);
+                              audioprov.setAudioBookAuthor(widget.bookTitle);
+                              //context.read<AudioProvider>().setAudioBookAuthor(widget.bookTitle);
                               /*
                               Navigator.push(context, MaterialPageRoute(builder: (context) {
                                 return AudioReader(audioBookTitle: widget.bookTitle);

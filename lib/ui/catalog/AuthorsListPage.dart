@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
@@ -48,8 +50,13 @@ class _MyAuthorsListPage extends State<AuthorsListPage> {
                 if (snapshot.data == null) {
                   return Container(
                     child: const Center(
-                      //child: CircularProgressIndicator(),
                       child: Text("Database currently not available"),
+                    ),
+                  );
+                } else if (snapshot.hasError && snapshot.error is SocketException) {
+                  return Container(
+                    child: const Center(
+                      child: Text("Please connect to the Internet"),
                     ),
                   );
                 } else {
