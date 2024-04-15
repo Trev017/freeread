@@ -5,20 +5,22 @@ import 'dart:io';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
 
-class BooksListGenresPage extends StatefulWidget {
-  final String bookGenre;
-  const BooksListGenresPage(
+class AuthorInformationPage extends StatefulWidget {
+  final String authorFirst;
+  final String authorLast;
+  const AuthorInformationPage(
       {
         super.key,
-        required this.bookGenre,
+        required this.authorFirst,
+        required this.authorLast,
       }
       );
 
   @override
-  State<BooksListGenresPage> createState() => _MyBooksListGenresPageState();
+  State<AuthorInformationPage> createState() => _MyAuthorInformationPageState();
 }
 
-class _MyBooksListGenresPageState extends State<BooksListGenresPage> {
+class _MyAuthorInformationPageState extends State<AuthorInformationPage> {
   String selectedValue = "Default";
   //String alphaDesc = "Alphabetically (Descending)";
   //String alphaAsc = "Alphabetically (Ascending)";
@@ -30,13 +32,13 @@ class _MyBooksListGenresPageState extends State<BooksListGenresPage> {
     ];
     return dropdownList;
   }
-  late Future<dynamic> requestedList = Future.value([]);
+  late Future<List<dynamic>> requestedList = Future.value([]);
 
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
   Future<List<dynamic>> getRequest() async {
     String s = onlineService.booksUrl;
-    final rp = await dio.get("$s&genre=^${widget.bookGenre}");
+    final rp = await dio.get("$s&author=${widget.authorFirst}&author=${widget.authorLast}");
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
@@ -112,7 +114,7 @@ class _MyBooksListGenresPageState extends State<BooksListGenresPage> {
     return SafeArea(
       child: Scaffold (
         appBar: AppBar(
-          title: const Text("Browse Books by Genre", textAlign: TextAlign.center,),
+          title: Text("Browse Books by ${widget.authorFirst} ${widget.authorLast}", textAlign: TextAlign.center,),
           leading: GestureDetector(
               child: const BackButton(),
               onTap: () {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'dart:io';
 import '../../services/OnlineService.dart';
@@ -19,13 +18,13 @@ class _MyBooksListPageState extends State<BooksListPage> {
   //String alphaAsc = "Alphabetically (Ascending)";
   List<DropdownMenuItem<String>> get options {
     List<DropdownMenuItem<String>> dropdownList = [
-      DropdownMenuItem(child: Text("Default"), value: "Default"),
-      DropdownMenuItem(child: Text("Alphabetically (Ascending)"), value: "Alphabetically (Ascending)"),
-      DropdownMenuItem(child: Text("Alphabetically (Descending)"), value: "Alphabetically (Descending)"),
+      const DropdownMenuItem(value: "Default", child: Text("Default")),
+      const DropdownMenuItem(value: "Alphabetically (Ascending)", child: Text("Alphabetically (Ascending)")),
+      const DropdownMenuItem(value: "Alphabetically (Descending)", child: Text("Alphabetically (Descending)")),
     ];
     return dropdownList;
   }
-  late Future<List<dynamic>> requestedList = Future.value([]);
+  late Future<dynamic> requestedList = Future.value([]);
 
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
@@ -43,7 +42,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
   }
 
   Future<void> originalList() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     setState(() {
       requestedList = getRequest();
     });
@@ -108,7 +107,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
         appBar: AppBar(
           title: const Text("Browse All", textAlign: TextAlign.center,),
           leading: GestureDetector(
-              child: BackButton(),
+              child: const BackButton(),
               onTap: () {
                 Navigator.pop(context);
               }
@@ -148,6 +147,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
                                 });
                                 break;
                               default:
+                                originalList();
                                 break;
                             }
                           });
@@ -202,21 +202,23 @@ class _MyBooksListPageState extends State<BooksListPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => BookInformationPage(
-                                        bookId: snapshot.data![index]['id'],
-                                        bookTitle: snapshot.data![index]['title'],
-                                        bookDescription: snapshot.data![index]['description'],
-                                        bookRss: snapshot.data![index]['url_rss'],
-                                        bookTotalTime: snapshot.data![index]['totaltimesecs'],
-                                        bookChapters: snapshot.data![index]['sections'],
-                                        bookAuthor: snapshot.data![index]['authors'],
+                                        bookId: snapshot.data[index]['id'],
+                                        bookTitle: snapshot.data[index]['title'],
+                                        bookDescription: snapshot.data[index]['description'],
+                                        bookLanguage: snapshot.data[index]['language'],
+                                        bookYear: snapshot.data[index]['copyright_year'],
+                                        bookRss: snapshot.data[index]['url_rss'],
+                                        bookTotalTime: snapshot.data[index]['totaltimesecs'],
+                                        bookChapters: snapshot.data[index]['sections'],
+                                        bookAuthor: snapshot.data[index]['authors'],
                                       )
                                   )
                               );
                               },
                             style: ElevatedButton.styleFrom(
-                              shape: ContinuousRectangleBorder(),
+                              shape: const ContinuousRectangleBorder(),
                               //backgroundColor: Colors.grey.shade50,
-                              minimumSize: Size.fromHeight(50),
+                              minimumSize: const Size.fromHeight(50),
                             ),
                             child: Text(snapshot.data![index]['title']),
                           ),

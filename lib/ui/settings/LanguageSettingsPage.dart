@@ -16,7 +16,7 @@ class _MyLanguageSettingsPage extends State<LanguageSettingsPage> {
       appBar: AppBar(
         title: const Text("Language Settings Page", textAlign: TextAlign.center,),
         leading: GestureDetector(
-            child: BackButton(),
+            child: const BackButton(),
             onTap: () {
               Navigator.pop(context);
             }
@@ -26,7 +26,7 @@ class _MyLanguageSettingsPage extends State<LanguageSettingsPage> {
         padding: const EdgeInsets.all(80),
         child: const Column(
           children: [
-            Center(child: const Text ("Work in Progress"),),
+            Center(child: Text ("Work in Progress"),),
           ],
         ),
       ),

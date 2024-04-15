@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
-import '../../services/OnlineService.dart';
 import 'BooksListGenresPage.dart';
 
 class GenresListPage extends StatefulWidget {
@@ -54,7 +50,7 @@ class _MyGenresListPage extends State<GenresListPage> {
       appBar: AppBar(
         title: const Text("Browse Genres", textAlign: TextAlign.center,),
         leading: GestureDetector(
-            child: BackButton(),
+            child: const BackButton(),
             onTap: () {
               Navigator.pop(context);
             }
@@ -75,12 +71,12 @@ class _MyGenresListPage extends State<GenresListPage> {
                         )
                     );
                   },
-                  child: Text(listofGenres[index]),
                   style: ElevatedButton.styleFrom(
-                    shape: ContinuousRectangleBorder(),
+                    shape: const ContinuousRectangleBorder(),
                     //backgroundColor: Colors.grey.shade50,
-                    minimumSize: Size.fromHeight(50),
+                    minimumSize: const Size.fromHeight(50),
                   ),
+                  child: Text(listofGenres[index]),
                 ),
               );
             }

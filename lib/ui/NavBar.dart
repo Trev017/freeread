@@ -10,6 +10,8 @@ import 'package:miniplayer/miniplayer.dart';
 import 'package:provider/provider.dart';
 
 class NavBar extends StatefulWidget {
+  const NavBar({super.key});
+
   @override
   State<NavBar> createState() => _NavBarState();
 }
@@ -109,12 +111,13 @@ class _NavBarState extends State<NavBar> {
                                         children: [
                                           Flexible(
                                             child: Text(
-                                              "Test 1",
+                                              "From the Foundation of the City Vol. 01",
                                               maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               //style: TextStyle(color: Colors.black),
                                             ),
                                           ),
+                                          /*
                                           Flexible(
                                             child: Text(
                                               "Test 2",
@@ -123,6 +126,7 @@ class _NavBarState extends State<NavBar> {
                                               //style: TextStyle(color: Colors.black),
                                             ),
                                           ),
+                                          */
                                         ],
                                       )
                                   ),

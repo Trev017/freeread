@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class AudioProvider extends ChangeNotifier {
   String? audioBookTitle;

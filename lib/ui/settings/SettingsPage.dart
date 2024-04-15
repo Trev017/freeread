@@ -33,12 +33,12 @@ class _MySettingsPage extends State<SettingsPage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => LanguageSettingsPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LanguageSettingsPage()));
                         },
                         style: ElevatedButton.styleFrom(
-                          shape: ContinuousRectangleBorder(),
+                          shape: const ContinuousRectangleBorder(),
                           backgroundColor: Colors.red.shade100,
-                          minimumSize: Size.fromHeight(90),
+                          minimumSize: const Size.fromHeight(90),
                         ),
                         child: const Text(
                           "Language Settings",
@@ -51,12 +51,12 @@ class _MySettingsPage extends State<SettingsPage> {
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AppearanceSettingsPage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const AppearanceSettingsPage()));
                         },
                         style: ElevatedButton.styleFrom(
-                          shape: ContinuousRectangleBorder(),
+                          shape: const ContinuousRectangleBorder(),
                           backgroundColor: Colors.red.shade100,
-                          minimumSize: Size.fromHeight(90),
+                          minimumSize: const Size.fromHeight(90),
                         ),
                         child: const Text(
                           "Change Appearance",
@@ -88,9 +88,9 @@ class _MySettingsPage extends State<SettingsPage> {
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          shape: ContinuousRectangleBorder(),
+                          shape: const ContinuousRectangleBorder(),
                           backgroundColor: Colors.red.shade100,
-                          minimumSize: Size.fromHeight(90),
+                          minimumSize: const Size.fromHeight(90),
                         ),
                         child: const Text(
                           "Contact Developer",

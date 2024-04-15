@@ -1,16 +1,14 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:miniplayer/miniplayer.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
-import '../model/BookModel.dart';
-import 'ui/home/HomePage.dart';
 import '../ui/NavBar.dart';
 import 'ui/AudioProvider.dart';
+import 'package:hive/hive.dart';
 
-void main() {
+void main() async {
   //Provider.debugCheckInvalidValueType = null;
+  await Hive.initFlutter();
+  await Hive.openBox('hive_local_db');
   runApp(const MyApp());
 }
 
@@ -46,14 +44,14 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             brightness: Brightness.light,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
-            textTheme: TextTheme().apply(
+            textTheme: const TextTheme().apply(
               bodyColor: Colors.black,
               displayColor: Colors.black,
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
                 foregroundColor: Colors.black,
-                textStyle: TextStyle(color: Colors.black),
+                textStyle: const TextStyle(color: Colors.black),
               ),
             ),
             useMaterial3: true,
@@ -62,7 +60,7 @@ class _MyAppState extends State<MyApp> {
             brightness: Brightness.dark,
             //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
             useMaterial3: true,
-            textTheme: TextTheme().apply(
+            textTheme: const TextTheme().apply(
               bodyColor: Colors.lightBlueAccent.shade400,
               displayColor: Colors.lightBlueAccent.shade400,
             ),
@@ -75,7 +73,7 @@ class _MyAppState extends State<MyApp> {
           ),
           themeMode: themeMode,
           //Creates the base application, begins with the home page
-          home: NavBar(),
+          home: const NavBar(),
           debugShowMaterialGrid: false,
           debugShowCheckedModeBanner: false
       ),

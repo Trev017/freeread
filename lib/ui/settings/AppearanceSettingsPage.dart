@@ -16,7 +16,7 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
       appBar: AppBar(
         title: const Text("Appearance Settings Page", textAlign: TextAlign.center,),
         leading: GestureDetector(
-          child: BackButton(),
+          child: const BackButton(),
           onTap: () {
             Navigator.pop(context);
         }
@@ -33,9 +33,9 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
                   MyApp.of(context).changeTheme(ThemeMode.system);
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: ContinuousRectangleBorder(),
+                  shape: const ContinuousRectangleBorder(),
                   backgroundColor: Colors.red.shade100,
-                  minimumSize: Size.fromHeight(90),
+                  minimumSize: const Size.fromHeight(90),
                 ),
                 child: RichText(
                   text: const TextSpan(
@@ -54,9 +54,9 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
                   MyApp.of(context).changeTheme(ThemeMode.light);
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: ContinuousRectangleBorder(),
+                  shape: const ContinuousRectangleBorder(),
                   backgroundColor: Colors.grey.shade50,
-                  minimumSize: Size.fromHeight(90),
+                  minimumSize: const Size.fromHeight(90),
                 ),
                 child: RichText(
                   text: const TextSpan(
@@ -75,9 +75,9 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
                   MyApp.of(context).changeTheme(ThemeMode.dark);
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: ContinuousRectangleBorder(),
+                  shape: const ContinuousRectangleBorder(),
                   backgroundColor: Colors.grey.shade900,
-                  minimumSize: Size.fromHeight(90),
+                  minimumSize: const Size.fromHeight(90),
                 ),
                 child: RichText(
                   text: const TextSpan(

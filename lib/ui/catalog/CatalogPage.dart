@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import '../../services/OnlineService.dart';
 import 'RecommendationsPage.dart';
@@ -57,14 +56,14 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                   //Navigates to the downloads page
                                   Row(
                                     children: [
-                                      Text("Recommended"),
+                                      const Text("Recommended"),
                                       const Spacer(),
                                       TextButton (
                                         onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => RecommendationsPage()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const RecommendationsPage()));
                                         },
-                                        child: Text.rich(
-                                          const TextSpan(
+                                        child: const Text.rich(
+                                          TextSpan(
                                             children: [
                                               TextSpan(text: "More",),
                                               WidgetSpan(child: Icon(Icons.arrow_forward_ios)),
@@ -111,6 +110,8 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                                                         bookId: snapshot.data[index]['id'],
                                                                         bookTitle: snapshot.data[index]['title'],
                                                                         bookDescription: snapshot.data[index]['description'],
+                                                                        bookLanguage: snapshot.data[index]['language'],
+                                                                        bookYear: snapshot.data[index]['copyright_year'],
                                                                         bookRss: snapshot.data[index]['url_rss'],
                                                                         bookTotalTime: snapshot.data[index]['totaltimesecs'],
                                                                         bookChapters: snapshot.data[index]['sections'],
@@ -119,12 +120,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                                                   )
                                                               );
                                                               },
-                                                            child: Text(snapshot.data[index]['title']),
                                                             style: ElevatedButton.styleFrom(
-                                                              shape: ContinuousRectangleBorder(),
+                                                              shape: const ContinuousRectangleBorder(),
                                                               //backgroundColor: Colors.grey.shade50,
-                                                              minimumSize: Size.fromHeight(50),
+                                                              minimumSize: const Size.fromHeight(50),
                                                             ),
+                                                            child: Text(snapshot.data[index]['title']),
                                                           ),
                                                         ),
                                                       ),
@@ -144,12 +145,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                           Center(
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => BooksListPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const BooksListPage()));
                               },
                               style: OutlinedButton.styleFrom(
-                                shape: ContinuousRectangleBorder(),
+                                shape: const ContinuousRectangleBorder(),
                                 backgroundColor: Colors.grey.shade50,
-                                minimumSize: Size.fromHeight(90),
+                                minimumSize: const Size.fromHeight(90),
                               ),
                               child: const Text ("Browse All Books", style: TextStyle(color: Colors.black)),
                             ),
@@ -158,12 +159,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                           Center(
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => AuthorsListPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const AuthorsListPage()));
                               },
                               style: OutlinedButton.styleFrom(
-                                shape: ContinuousRectangleBorder(),
+                                shape: const ContinuousRectangleBorder(),
                                 backgroundColor: Colors.grey.shade50,
-                                minimumSize: Size.fromHeight(90),
+                                minimumSize: const Size.fromHeight(90),
                               ),
                               child: const Text ("Browse Authors", style: TextStyle(color: Colors.black)),
                             ),
@@ -172,12 +173,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                           Center(
                             child: OutlinedButton(
                               onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => GenresListPage()));
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => const GenresListPage()));
                               },
                               style: OutlinedButton.styleFrom(
-                                shape: ContinuousRectangleBorder(),
+                                shape: const ContinuousRectangleBorder(),
                                 backgroundColor: Colors.grey.shade50,
-                                minimumSize: Size.fromHeight(90),
+                                minimumSize: const Size.fromHeight(90),
                               ),
                               child: const Text ("Browse Genres", style: TextStyle(color: Colors.black)),
                             ),

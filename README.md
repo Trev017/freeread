@@ -1,8 +1,43 @@
-# freeread
+# FreeRead, an Audiobook Application for iPhone
 
 Submission for Senior Project.
 
-## Getting Started
+# Introduction
+
+The
+
+# Functional and Non-Functional Requirements
+
+The
+
+# Technologies Utilized
+
+The
+
+# Technical Approaches
+
+The
+
+## Sitemap Diagram
+
+The
+
+## Logical Solution Diagram
+
+The
+
+## Physical Solution Diagram
+
+The
+
+## Component Diagrams
+
+The
+
+# Risk Management
+
+The
+
 
 This project is a starting point for a Flutter application.
 

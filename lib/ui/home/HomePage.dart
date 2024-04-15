@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import '../../model/BookModel.dart';
 import 'package:dio/dio.dart';
-import 'package:webfeed/webfeed.dart';
 import '../../services/OnlineService.dart';
 import 'FavoritesPage.dart';
 import 'DownloadsPage.dart';
 import '../BookInformationPage.dart';
+import '../../model/BookModelClass.dart';
+import '../../model/BookModelMethods.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -20,12 +18,19 @@ class HomePage extends StatefulWidget {
 class _MyHomePageState extends State<HomePage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  final BookModelMethods bookModelMethods = BookModelMethods();
+  List<BookModel> books = [];
   //final ScrollController _scrollController = ScrollController();
   //Temporary method used for displaying books in FutureBuilder
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
+  }
+
+  void getHiveBooks() async {
+    var booksData = await bookModelMethods.getBookList();
+    books.addAll(booksData);
   }
 
   /*
@@ -59,6 +64,7 @@ class _MyHomePageState extends State<HomePage> {
   @override
   void initState() {
     getRequest();
+    getHiveBooks();
     super.initState();
   }
 
@@ -87,11 +93,11 @@ class _MyHomePageState extends State<HomePage> {
                                   //Navigates to the downloads page
                                   Row(
                                     children: [
-                                      Text("Your Downloads"),
+                                      const Text("Your Downloads"),
                                       const Spacer(),
                                       TextButton (
                                         onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => DownloadsPage()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const DownloadsPage()));
                                         },
                                         child: const Text.rich(
                                           TextSpan(
@@ -112,57 +118,62 @@ class _MyHomePageState extends State<HomePage> {
                                           child: SizedBox.square(
                                             dimension: 100,
                                             child: FutureBuilder(
-                                              future: getRequest(),
+                                              future: bookModelMethods.getBookList(),
                                               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                                                 if (snapshot.data == null) {
                                                   return Container(
                                                     padding: const EdgeInsets.all(80),
                                                     child: const Center(
                                                       //child: CircularProgressIndicator(),
-                                                      child: Text("Database currently not available"),
+                                                      //child: Text("Database currently not available"),
+                                                      child: Text("Database currently empty. Mark a book as your favorite."),
                                                     ),
                                                   );
                                                 } else {
                                                   return ListView.builder(
                                                     scrollDirection: Axis.horizontal,
                                                     itemCount: snapshot.data.length,
-                                                    itemBuilder: (ctx, index) => Card(
-                                                      child: SizedBox.square(
-                                                        dimension: 140,
-                                                        child: ListTile(
-                                                          title: ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (
-                                                                          context) =>
-                                                                          BookInformationPage(
-                                                                            bookId: snapshot.data[index]['id'],
-                                                                            bookTitle: snapshot.data[index]['title'],
-                                                                            bookDescription: snapshot.data[index]['description'],
-                                                                            bookRss: snapshot.data[index]['url_rss'],
-                                                                            bookTotalTime: snapshot.data[index]['totaltimesecs'],
-                                                                            bookChapters: snapshot.data[index]['sections'],
-                                                                            bookAuthor: snapshot.data[index]['authors'],
-                                                                          )
-                                                                  )
-                                                              );
-                                                            },
-                                                            /*
+                                                    itemBuilder: (ctx, index) {
+                                                      return Card(
+                                                        child: SizedBox.square(
+                                                          dimension: 140,
+                                                          child: ListTile(
+                                                            title: ElevatedButton(
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) {
+                                                                          return BookInformationPage(
+                                                                            bookId: snapshot.data[index].id,
+                                                                            bookTitle: snapshot.data[index].title,
+                                                                            bookDescription: snapshot.data[index].description,
+                                                                            bookLanguage: snapshot.data[index].language,
+                                                                            bookYear: snapshot.data[index].copyright_year,
+                                                                            bookRss: snapshot.data[index].url_rss,
+                                                                            bookTotalTime: snapshot.data[index].totaltimesecs,
+                                                                            bookChapters: snapshot.data[index].chapters,
+                                                                            bookAuthor: snapshot.data[index].author,
+                                                                          );
+                                                                        }
+                                                                    )
+                                                                );
+                                                              },
+                                                              style: ElevatedButton.styleFrom(
+                                                                shape: const ContinuousRectangleBorder(),
+                                                                //backgroundColor: Colors.grey.shade50,
+                                                                minimumSize: const Size.fromHeight(50),
+                                                              ),
+                                                              /*
                                                               icon: Image.network(bookRss),
                                                               label: Text(snapshot.data[index]['title']),
                                                             */
-                                                            child: Text(snapshot.data[index]['title']),
-                                                            style: ElevatedButton.styleFrom(
-                                                              shape: ContinuousRectangleBorder(),
-                                                              //backgroundColor: Colors.grey.shade50,
-                                                              minimumSize: Size.fromHeight(50),
+                                                              child: Text(snapshot.data[index].title),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ),
+                                                      );
+                                                    }
                                                   );
                                                 }
                                               },
@@ -180,11 +191,11 @@ class _MyHomePageState extends State<HomePage> {
                                   //Navigates to the favorites page
                                   Row(
                                     children: [
-                                      Text("Your Favorites"),
+                                      const Text("Your Favorites"),
                                       const Spacer(),
                                       TextButton (
                                         onPressed: () {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => FavoritesPage()));
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritesPage()));
                                         },
                                         child: const Text.rich(
                                           TextSpan(
@@ -205,57 +216,62 @@ class _MyHomePageState extends State<HomePage> {
                                           child: SizedBox.square(
                                             dimension: 100,
                                             child: FutureBuilder(
-                                              future: getRequest(),
+                                              future: bookModelMethods.getBookList(),
                                               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                                                 if (snapshot.data == null) {
                                                   return Container(
                                                     padding: const EdgeInsets.all(80),
                                                     child: const Center(
                                                       //child: CircularProgressIndicator(),
-                                                      child: Text("Database currently not available"),
+                                                      //child: Text("Database currently not available"),
+                                                      child: Text("Database currently empty. Mark a book as your favorite."),
                                                     ),
                                                   );
                                                 } else {
                                                   return ListView.builder(
-                                                    scrollDirection: Axis.horizontal,
-                                                    itemCount: snapshot.data.length,
-                                                    itemBuilder: (ctx, index) => Card(
-                                                      child: SizedBox.square(
-                                                        dimension: 140,
-                                                        child: ListTile(
-                                                          title: ElevatedButton(
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (
-                                                                          context) =>
-                                                                          BookInformationPage(
-                                                                            bookId: snapshot.data[index]['id'],
-                                                                            bookTitle: snapshot.data[index]['title'],
-                                                                            bookDescription: snapshot.data[index]['description'],
-                                                                            bookRss: snapshot.data[index]['url_rss'],
-                                                                            bookTotalTime: snapshot.data[index]['totaltimesecs'],
-                                                                            bookChapters: snapshot.data[index]['sections'],
-                                                                            bookAuthor: snapshot.data[index]['authors'],
-                                                                          )
-                                                                  )
-                                                              );
-                                                            },
-                                                            /*
+                                                      scrollDirection: Axis.horizontal,
+                                                      itemCount: snapshot.data.length,
+                                                      itemBuilder: (ctx, index) {
+                                                        return Card(
+                                                          child: SizedBox.square(
+                                                            dimension: 140,
+                                                            child: ListTile(
+                                                              title: ElevatedButton(
+                                                                onPressed: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) {
+                                                                            return BookInformationPage(
+                                                                              bookId: snapshot.data[index].id,
+                                                                              bookTitle: snapshot.data[index].title,
+                                                                              bookDescription: snapshot.data[index].description,
+                                                                              bookLanguage: snapshot.data[index].language,
+                                                                              bookYear: snapshot.data[index].copyright_year,
+                                                                              bookRss: snapshot.data[index].url_rss,
+                                                                              bookTotalTime: snapshot.data[index].totaltimesecs,
+                                                                              bookChapters: snapshot.data[index].chapters,
+                                                                              bookAuthor: snapshot.data[index].author,
+                                                                            );
+                                                                          }
+                                                                      )
+                                                                  );
+                                                                },
+                                                                style: ElevatedButton.styleFrom(
+                                                                  shape: const ContinuousRectangleBorder(),
+                                                                  //backgroundColor: Colors.grey.shade50,
+                                                                  minimumSize: const Size.fromHeight(50),
+                                                                ),
+                                                                /*
                                                               icon: Image.network(bookRss),
                                                               label: Text(snapshot.data[index]['title']),
                                                             */
-                                                            child: Text(snapshot.data[index]['title']),
-                                                            style: ElevatedButton.styleFrom(
-                                                              shape: ContinuousRectangleBorder(),
-                                                              //backgroundColor: Colors.grey.shade50,
-                                                              minimumSize: Size.fromHeight(50),
+                                                                child: Text(snapshot.data[index].title),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                        );
+                                                      }
                                                   );
                                                 }
                                               },

@@ -1,19 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
-import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
-import 'package:webfeed/webfeed.dart';
-import '../services/OnlineService.dart';
+//import 'package:webfeed/webfeed.dart';
 import 'AudioProvider.dart';
-import 'AudioReader.dart';
+import 'catalog/AuthorInformationPage.dart';
+import '../model/BookModelClass.dart';
+import '../model/BookModelMethods.dart';
 
 class BookInformationPage extends StatefulWidget {
   final String bookId;
   final String bookTitle;
   final String bookDescription;
+  final String bookLanguage;
+  final String bookYear;
   final String bookRss;
   final int bookTotalTime;
   final List bookAuthor;
@@ -25,6 +26,8 @@ class BookInformationPage extends StatefulWidget {
         required this.bookId,
         required this.bookTitle,
         required this.bookDescription,
+        required this.bookLanguage,
+        required this.bookYear,
         required this.bookRss,
         required this.bookTotalTime,
         required this.bookAuthor,
@@ -39,7 +42,8 @@ class BookInformationPage extends StatefulWidget {
 class _MyBookInformationPagePage extends State<BookInformationPage> {
   int currentPageIndex = 0;
   List convertChapterList = [];
-  var audioprov = null;
+  var audioprov;
+  final BookModelMethods bookModelMethods = BookModelMethods();
 
   String convertTotalSeconds(int x) {
     //String parsedTotalSeconds = int.parse(x);
@@ -55,7 +59,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
     return widget.bookAuthor[0]['last_name'];
   }
 
-  //
+  /*
   Future<String?> getRssImage() async {
     final client = http.Client();
     final response = await client.get(Uri.parse(widget.bookRss));
@@ -63,11 +67,11 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
     final imageUrl = feed.itunes?.image?.href;
     return imageUrl;
   }
-  //
+  */
 
-  //
+  /*
   Future<List> getAudioList() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
     List? mp3List = [];
     final client = http.Client();
     final response = await client.get(Uri.parse(widget.bookRss));
@@ -81,29 +85,32 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
     }
     return mp3List;
   }
-  //
+  */
+  /*
   List parseList() {
     List apiList = [];
     getAudioList().then((value) {
-      if (value != null) {
-        value.forEach((c) {
-          apiList.add(c);
-        });
+      for (var c in value) {
+        apiList.add(c);
       }
-    });
+        });
     return apiList;
   }
+  */
   //
-  //
+
+  void addtoFavorites(BookModel bookModel) {
+    bookModelMethods.addBook(bookModel);
+  }
 
   @override
   void initState() {
+    /*
     getAudioList().then((value) {
-      if (value is List) {
-        convertChapterList = value;
-      }
-      return convertChapterList;
+      convertChapterList = value;
+          return convertChapterList;
     });
+    */
     super.initState();
   }
 
@@ -186,7 +193,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                         Tooltip(
                           message: "Download chapter ${widget.bookChapters[index]['listen_url']}",
                           child: IconButton(
-                            icon: Icon(Icons.file_download_outlined),
+                            icon: const Icon(Icons.file_download_outlined),
                             onPressed: () {
                               //
                             },
@@ -206,7 +213,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
         child: Scaffold(
           appBar: AppBar(
             leading: GestureDetector(
-                child: BackButton(),
+                child: const BackButton(),
                 onTap: () {
                   Navigator.pop(context);
                 }),
@@ -214,7 +221,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
               Tooltip(
                 message: "Download all",
                 child: IconButton(
-                  icon: Icon(Icons.file_download_outlined),
+                  icon: const Icon(Icons.file_download_outlined),
                   onPressed: () {
                     //
                   },
@@ -277,8 +284,24 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                               decoration: BoxDecoration(
                                 border: Border.all(width: 1),
                               ),
-                              child: Center(
-                                child: Text("By: ${getFirstName()} ${getLastName()}"),
+                              child: OutlinedButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AuthorInformationPage(
+                                            authorFirst: getFirstName(),
+                                            authorLast: getLastName(),
+                                          )
+                                      )
+                                  );
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  shape: const ContinuousRectangleBorder(),
+                                  //backgroundColor: Colors.grey.shade50,
+                                  //minimumSize: Size.fromHeight(90),
+                                ),
+                                child: Text ("By: ${getFirstName()} ${getLastName()}"),
                               ),
                             ),
                           ),
@@ -305,13 +328,13 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                           Container(
                             width: MediaQuery.sizeOf(context).width * 0.2,
                             height: MediaQuery.sizeOf(context).height * 0.1,
-                            padding: EdgeInsets.all(5),
+                            padding: const EdgeInsets.all(5),
                             child: OutlinedButton(
                               onPressed: () {
                                 //
                               },
                               style: OutlinedButton.styleFrom(
-                                shape: ContinuousRectangleBorder(),
+                                shape: const ContinuousRectangleBorder(),
                                 //backgroundColor: Colors.grey.shade50,
                                 //minimumSize: Size.fromHeight(90),
                               ),
@@ -325,16 +348,28 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                             width: MediaQuery.sizeOf(context).width * 0.2,
                             height: MediaQuery.sizeOf(context).height * 0.1,
                             */
-                            padding: EdgeInsets.all(25),
+                            padding: const EdgeInsets.all(25),
                             child: Tooltip(
                               message: "Mark as favorite",
                               child: IconButton(
-                                icon: Icon(Icons.star_border_sharp),
-                                selectedIcon: Icon(Icons.star_sharp),
+                                icon: const Icon(Icons.star_border_sharp),
+                                selectedIcon: const Icon(Icons.star_sharp),
                                 onPressed: () {
                                   setState(() {
-                                    //
-                                  });
+                                    BookModel addedFavorite = BookModel(
+                                        id: widget.bookId,
+                                        title: widget.bookTitle,
+                                        description: widget.bookDescription,
+                                        language: widget.bookLanguage,
+                                        copyright_year: widget.bookYear,
+                                        url_rss: widget.bookRss,
+                                        totaltimesecs: widget.bookTotalTime,
+                                        author: widget.bookAuthor,
+                                        chapters: widget.bookChapters
+                                    );
+                                    addtoFavorites(addedFavorite);
+                                    }
+                                  );
                                 },
                               ),
                             ),
@@ -424,7 +459,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                               ),
                               */
                               //
-                              child: Container(
+                              child: SizedBox(
                                 width: MediaQuery.sizeOf(context).width * 0.9,
                                 child: widgetList[currentPageIndex],
                               ),

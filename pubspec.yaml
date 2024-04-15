@@ -37,27 +37,29 @@ dependencies:
   cupertino_icons: any
   hive: any
   hive_flutter: any
+  hive_generator: any
   provider: any
   path_provider: any
   just_audio: any
   just_audio_windows: any
   audio_video_progress_bar: any
   http: any
-  stacked: any
-  stacked_services: any
+  # stacked: any
+  # stacked_services: any
   auto_route: any
-  get_it: any
+  # get_it: any
   injectable: any
-  google_fonts: any
+  # google_fonts: any
   miniplayer: any
-  flutter_bloc: any
+  # flutter_bloc: any
   equatable: any
-  json_annotation: any
+  # json_annotation: any
   dio: any
   adaptive_navbar: any
   shared_preferences: any
-  webfeed: any
+  # webfeed: any
   audio_service: any
+  # analyzer: any
 
 dev_dependencies:
   flutter_test:
@@ -66,17 +68,21 @@ dev_dependencies:
   build_runner: any
   auto_route_generator: any
   injectable_generator: any
-  json_serializable: any
+  # json_serializable: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+dependency_overrides:
+  collection: 
+  # analyzer: any
 
 # The following section is specific to Flutter packages.
 flutter:

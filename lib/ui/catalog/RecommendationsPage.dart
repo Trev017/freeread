@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
+import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
@@ -35,7 +35,7 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
         appBar: AppBar(
           title: const Text("Recommended", textAlign: TextAlign.center,),
           leading: GestureDetector(
-              child: BackButton(),
+              child: const BackButton(),
               onTap: () {
                 Navigator.pop(context);
               }
@@ -50,7 +50,14 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
                 if (snapshot.data == null) {
                   return Container(
                     child: const Center(
+                      //child: CircularProgressIndicator(),
                       child: Text("Database currently not available"),
+                    ),
+                  );
+                } else if (snapshot.hasError && snapshot.error is SocketException) {
+                  return Container(
+                    child: const Center(
+                      child: Text("Please connect to the Internet"),
                     ),
                   );
                 } else {
@@ -70,6 +77,8 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
                                         bookId: snapshot.data[index]['id'],
                                         bookTitle: snapshot.data[index]['title'],
                                         bookDescription: snapshot.data[index]['description'],
+                                        bookLanguage: snapshot.data[index]['language'],
+                                        bookYear: snapshot.data[index]['copyright_year'],
                                         bookRss: snapshot.data[index]['url_rss'],
                                         bookTotalTime: snapshot.data[index]['totaltimesecs'],
                                         bookChapters: snapshot.data[index]['sections'],
@@ -78,12 +87,12 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
                                   )
                               );
                               },
-                            child: Text(snapshot.data[index]['title']),
                             style: ElevatedButton.styleFrom(
-                              shape: ContinuousRectangleBorder(),
+                              shape: const ContinuousRectangleBorder(),
                               //backgroundColor: Colors.grey.shade50,
-                              minimumSize: Size.fromHeight(50),
+                              minimumSize: const Size.fromHeight(50),
                             ),
+                            child: Text(snapshot.data[index]['title']),
                           ),
                           //
                         ),

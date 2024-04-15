@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import '../../services/OnlineService.dart';
 
@@ -19,6 +18,7 @@ class _MyAuthorsListPage extends State<AuthorsListPage> {
   Future getRequest() async {
     final rp = await dio.get(onlineService.authorsUrl);
     List<Map<String, dynamic>> authors = (rp.data['authors'] as List).map((e) => e as Map<String, dynamic>).toList();
+    authors.length;
     return authors;
   }
 
@@ -35,7 +35,7 @@ class _MyAuthorsListPage extends State<AuthorsListPage> {
         appBar: AppBar(
           title: const Text("Browse Authors", textAlign: TextAlign.center,),
           leading: GestureDetector(
-              child: BackButton(),
+              child: const BackButton(),
               onTap: () {
                 Navigator.pop(context);
               }
@@ -60,24 +60,28 @@ class _MyAuthorsListPage extends State<AuthorsListPage> {
                     ),
                   );
                 } else {
+                  int il = snapshot.data!.length;
+                  //il = 6426;
                   return ListView.builder(
-                    itemCount: snapshot.data.length,
+                    itemCount: il == null ? 0 : 50,
                     itemBuilder: (ctx, index) {
                       /*
                       String firstName = snapshot.data[index]['first_name'];
                       String lastName = snapshot.data[index]['last_name'];
                       */
+                      /*
                       Card(
                         child: SizedBox.square(
                           dimension: 140,
                           child: ListTile(
-                            title: Text('${snapshot.data[index]['first_name']} ${snapshot.data[index]['last_name']}'),
+                            title: Text('${snapshot.data![index]['first_name']} ${snapshot.data![index]['last_name']}'),
                             contentPadding: const EdgeInsets.only(bottom: 5),
                             shape: ContinuousRectangleBorder(side: BorderSide(color: Colors.black),),
                           ),
                         ),
                       );
-                      /*
+                      */
+                      //
                       Card(
                         child: SizedBox.square(
                           dimension: 45,
@@ -87,18 +91,19 @@ class _MyAuthorsListPage extends State<AuthorsListPage> {
                               onPressed: () {
                                 //
                               },
-                              child: Text('${snapshot.data[index]['first_name']} ${snapshot.data[index]['last_name']}'),
                               style: ElevatedButton.styleFrom(
-                                shape: ContinuousRectangleBorder(),
+                                shape: const ContinuousRectangleBorder(),
                                 //backgroundColor: Colors.grey.shade50,
-                                minimumSize: Size.fromHeight(50),
+                                minimumSize: const Size.fromHeight(50),
                               ),
+                              child: Text('${snapshot.data[index]['first_name']} ${snapshot.data[index]['last_name']}'),
                             ),
                             //
                           ),
                         ),
                       );
-                      */
+                      return null;
+                      //
                     },
                     /*
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
