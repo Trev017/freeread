@@ -189,22 +189,26 @@ The individual chose to learn Flutter to develop the user interface of the appli
 ## Sitemap Diagram
 
 The diagram that is provided illustrates the sitemap of the project. The home page, the catalog page, the search page, and the settings page are all accessible through the program's navigation bar. The book reading page is accessible through the mini player, which appears throughout the application whenever a user opens a different page.
-The
+![Sitemap (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/a23f6c14-d9ad-4468-91d4-b78a4a7ebde9)
 
 ## Logical Solution Diagram
 
 The diagram that is provided illustrates the logical solution design of the project. The design contains the presentation layer, the application layer, the data layer, and the primary technologies used in the development of the program. The presentation layer contains the view classes that would construct the pages of the application and the widgets that appear in the program. The application layer contains the model classes that construct objects used for offline storage and the service classes help the application perform HTTP GET requests from the LibriVox API. The data layer contains the offline database storage that the application will use to store data. The coding language and framework that the program will be using are Dart, Flutter, and Hive.
-The
+![Logical Software Architecture Diagram (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/130df454-30cd-4876-9efa-30f133e78737)
 
 ## Physical Solution Diagram
 
 The diagram that is provided illustrates the physical solution design of the project. The design depicts the local development environment running the application. The program utilizes Hive as a database to store offline data within the emulator available to the local development environment. It also connects to the LibriVox API to make API GET requests to get all audiobooks in the database’s catalog. The integrated development environments that are utilized for the project’s development are Visual Studio Code, Android SDK, and FlutLab.io. Currently, the individual has no plans on releasing the application to Apple’s App Store, which explains why the application’s physical solution is depicted in a local development environment.
-The
+![Physical Solution Architecture Diagram (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/772275e9-0370-4b64-acea-beeeab829ff6)
 
 ## Screenshots
 
-The following images display screenshots of the application. The screenshots are taken in the Android emulator, as there are currently problems with building and utilizing the iOS emulator.
-The
+The following images display screenshots of the application. The pages that are displayed are the search page, the book information page, the favorites page, and the book reading page.
+
+![Search Page Screenshot (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/f8239fe0-1148-49d2-9ff8-2f8c0b79b9d3)
+![Book Information Page Screenshot (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/d8a70488-028f-412a-bbd5-f3c04c7ddeb8)
+![Favorites Page Screenshot (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/c381127c-26b9-4f2e-ae48-b67cefac0483)
+![Book Reading Page Screenshot (CST-452 Milestone 6)](https://github.com/Trev017/freeread/assets/90469669/4f35a8f5-af63-4a31-aae3-fb0ba2246926)
 
 # Challenges in Development
 
