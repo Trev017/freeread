@@ -80,8 +80,6 @@ FreeRead is an audiobook application developed using the Dart programming langua
 <details>
 <summary>Browse Genres Page</summary>
 
-* As a system, I would like to display a database error so that I could tell users that access to the database is currently unavailable.
-* As a system, I would like to display a connection error so that I could ask the user if he or she is connected to the Internet.
 * As a user, I would like a page containing all genres so that I can find books on a specific genre.
 </details>
 
@@ -115,14 +113,6 @@ FreeRead is an audiobook application developed using the Dart programming langua
 </details>
 
 <details>
-<summary>Language Settings Page</summary>
-
-* As a user, I would like to configure what languages of a book reading should appear so that I could listen to an audiobook in whichever language I can understand it.
-* As a user, I would like to have the option to select all languages so that I could conveniently enable all language options for my audiobook recordings.
-* As a system, I would like to have all languages to currently be selected initially as default so that users could configure if they want specific languages filtered.
-</details>
-
-<details>
 <summary>Appearance Settings Page</summary>
 
 * As a user, I would like to change the appearance of the application to light mode so that I can view the application during day time.
@@ -152,6 +142,23 @@ FreeRead is an audiobook application developed using the Dart programming langua
 * As a user, I would like a play button so that I could continue the chapter reading.
 * As a user, I would like a playback speed slider so that I could adjust the speed of the chapter reading.
 * As a user, I would like the name of the chapter to display so that I could know where I currently am.
+</details>
+
+### Out of Scope Requirements
+
+<details>
+<summary>Browse Genres Page</summary>
+
+* As a system, I would like to display a database error so that I could tell users that access to the database is currently unavailable.
+* As a system, I would like to display a connection error so that I could ask the user if he or she is connected to the Internet.
+</details>
+
+<details>
+<summary>Language Settings Page</summary>
+
+* As a user, I would like to configure what languages of a book reading should appear so that I could listen to an audiobook in whichever language I can understand it.
+* As a user, I would like to have the option to select all languages so that I could conveniently enable all language options for my audiobook recordings.
+* As a system, I would like to have all languages to currently be selected initially as default so that users could configure if they want specific languages filtered.
 </details>
 
 ## Non-Functional Requirements
