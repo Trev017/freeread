@@ -4,9 +4,10 @@ import 'package:provider/provider.dart';
 import '../ui/NavBar.dart';
 import 'ui/AudioProvider.dart';
 import 'package:hive/hive.dart';
-
+//Class to start the program.
 void main() async {
   //Provider.debugCheckInvalidValueType = null;
+  //Initializes Hive to utilize a box.
   await Hive.initFlutter();
   await Hive.openBox('hive_local_db');
   runApp(const MyApp());
@@ -41,6 +42,7 @@ class _MyAppState extends State<MyApp> {
         },
       child: MaterialApp(
           title: 'Free Read',
+          //Defines the theme of the application.
           theme: ThemeData(
             brightness: Brightness.light,
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
@@ -58,7 +60,6 @@ class _MyAppState extends State<MyApp> {
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
-            //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
             useMaterial3: true,
             textTheme: const TextTheme().apply(
               bodyColor: Colors.lightBlueAccent.shade400,
@@ -78,94 +79,5 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false
       ),
     );
-    //
-    /*
-    return MultiProvider(
-      providers: [
-          ChangeNotifierProvider(create: (_) {
-            AudioProvider();
-          }
-          ),
-      ],
-      child: MaterialApp(
-          title: 'Free Read',
-          theme: ThemeData(
-            brightness: Brightness.light,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
-            textTheme: TextTheme().apply(
-              bodyColor: Colors.black,
-              displayColor: Colors.black,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black,
-                textStyle: TextStyle(color: Colors.black),
-              ),
-            ),
-            useMaterial3: true,
-          ),
-          darkTheme: ThemeData(
-            brightness: Brightness.dark,
-            //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
-            useMaterial3: true,
-            textTheme: TextTheme().apply(
-              bodyColor: Colors.lightBlueAccent.shade400,
-              displayColor: Colors.lightBlueAccent.shade400,
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.lightBlueAccent.shade400,
-                textStyle: TextStyle(color: Colors.lightBlueAccent.shade400),
-              ),
-            ),
-          ),
-          themeMode: themeMode,
-          //Creates the base application, begins with the home page
-          home: NavBar(),
-          debugShowMaterialGrid: false,
-          debugShowCheckedModeBanner: false
-      ),
-    );
-    */
-    /*
-    return MaterialApp(
-        title: 'Free Read',
-        theme: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange.shade400),
-          textTheme: TextTheme().apply(
-            bodyColor: Colors.black,
-            displayColor: Colors.black,
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.black,
-              textStyle: TextStyle(color: Colors.black),
-            ),
-          ),
-          useMaterial3: true,
-        ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-          //colorScheme: ColorScheme.fromSeed(seedColor: Colors.purple.shade900),
-          useMaterial3: true,
-          textTheme: TextTheme().apply(
-            bodyColor: Colors.lightBlueAccent.shade400,
-            displayColor: Colors.lightBlueAccent.shade400,
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.lightBlueAccent.shade400,
-              textStyle: TextStyle(color: Colors.lightBlueAccent.shade400),
-            ),
-          ),
-        ),
-        themeMode: themeMode,
-        //Creates the base application, begins with the home page
-        home: NavBar(),
-        debugShowMaterialGrid: false,
-        debugShowCheckedModeBanner: false
-    );
-    */
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-
+//Class to configure the languages the books will appear.
 class LanguageSettingsPage extends StatefulWidget {
+
+  //Class constructor
   const LanguageSettingsPage({super.key});
 
   @override

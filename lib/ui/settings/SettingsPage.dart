@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'AppearanceSettingsPage.dart';
 import 'LanguageSettingsPage.dart';
-
+//Class to display the settings page.
 class SettingsPage extends StatefulWidget {
+
+  //Class constructor
   const SettingsPage({super.key});
 
   @override
@@ -13,8 +15,7 @@ class _MySettingsPage extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    //
-    //Naigator and MaterialPageRoute ensures that the NavBar persists
+    //Navigator and MaterialPageRoute ensures that the NavBar persists
     return Navigator(
       onGenerateRoute: (RouteSettings rs) {
         return MaterialPageRoute(
@@ -29,7 +30,7 @@ class _MySettingsPage extends State<SettingsPage> {
                 padding: const EdgeInsets.all(80),
                 child: Column(
                   children: [
-                    //Navigates to the language settings page
+                    //Redirects the user to the language settings page.
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -47,7 +48,7 @@ class _MySettingsPage extends State<SettingsPage> {
                       ),
                     ),
                     const Spacer(),
-                    //Navigates to the appearance settings page
+                    //Redirects the user to the appearance settings page.
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
@@ -65,7 +66,7 @@ class _MySettingsPage extends State<SettingsPage> {
                       ),
                     ),
                     const Spacer(),
-                    //Opens an alert box on how to contact the developer
+                    //Alert dialog to display how to contact the developer.
                     Center(
                       child: ElevatedButton(
                         onPressed: () {

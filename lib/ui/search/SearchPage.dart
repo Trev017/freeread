@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
-
+//Class to display the search page.
 class SearchPage extends StatefulWidget {
+
+  //Class constructor
   const SearchPage({super.key});
 
   @override
@@ -17,6 +19,7 @@ class _MySearchPage extends State<SearchPage> {
   OnlineService onlineService = OnlineService();
   String searchText = "";
   String selectedSortValue = "Default";
+  //List to contain the sort options.
   List<DropdownMenuItem<String>> get sortOptions {
     List<DropdownMenuItem<String>> dropdownList = [
       const DropdownMenuItem(value: "Default", child: Text("Default")),
@@ -26,6 +29,7 @@ class _MySearchPage extends State<SearchPage> {
     return dropdownList;
   }
   String selectedSearchValue = "Title";
+  //List to contain the search options.
   List<DropdownMenuItem<String>> get searchOptions {
     List<DropdownMenuItem<String>> dropdownList = [
       const DropdownMenuItem(value: "Title", child: Text("Title")),
@@ -35,20 +39,20 @@ class _MySearchPage extends State<SearchPage> {
   }
 
 
-  //Method to perform a GET request to initially build a list
+  //Method to perform a GET request to initially build a list.
   Future getBooksRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
-  //Method to perform a GET request of books with a specified query
+  //Method to perform a GET request of books with a specified query.
   Future getBooksbyTitleRequest(String q) async {
     String s = onlineService.booksUrl;
     final rp = await dio.get("$s&title=^$q");
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
-  //Method to perform a GET request of authors with a specified query
+  //Method to perform a GET request of authors with a specified query.
   Future getAuthorsRequest(String q) async {
     String s = onlineService.authorsUrl;
     final rp = await dio.get("$s&last_name=$q");
@@ -85,58 +89,30 @@ class _MySearchPage extends State<SearchPage> {
     );
   }
 
-  //Sorts the list in descending order
+  //Sorts the list in descending order.
   Future<List<dynamic>> sortAlphaDesc() async {
     List<dynamic> rl = await requestedList;
     //Map mrl = rl.asMap();
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-          //MapEntry<int, dynamic> entryA = a;
-          //MapEntry<int, dynamic> entryB = b;
           return b.value["title"].compareTo(a.value["title"]);
-          //return a.value.compareTo(b.value);
         });
     return listToSort;
-    /*
-    listToSort.sort((a, b) {
-      return a['books']['title'].toLowerCase().compareTo(b['books']['title'].toLowerCase());
-    });
-    return listToSort;
-    */
-    /*
-    setState(() {
-      requestedList = listToSort;
-    });
-    */
   }
 
-  //Sorts the list in ascending order
+  //Sorts the list in ascending order.
   Future<List<dynamic>> sortAlphaAsc() async {
     List<dynamic> rl = await requestedList;
-    //Map mrl = rl.asMap();
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-          //MapEntry<dynamic, dynamic> entryA = a;
-          //MapEntry<dynamic, dynamic> entryB = b;
           return a.value["title"].compareTo(b.value["title"]);
-          //return a.value.compareTo(b.value);
         });
     return listToSort;
-    /*
-    listToSort.sort((a, b) {
-      return a['books']['title'].toLowerCase().compareTo(b['books']['title'].toLowerCase());
-    });
-    return listToSort;
-    */
-    /*
-    setState(() {
-      requestedList = listToSort;
-    });
-    */
   }
 
+  //Gets the search results on both books and authors.
   Future queryResults() async {
     return Future.wait([getBooksbyTitleRequest(searchText), getAuthorsRequest(searchText)]);
   }
@@ -174,6 +150,7 @@ class _MySearchPage extends State<SearchPage> {
                               Tooltip(
                                 message: "Filter Search",
                                 child: IconButton(
+                                  //Alert dialog to display the filtering and sorting options.
                                   icon: const Icon(Icons.filter_list),
                                   onPressed: () {
                                     showDialog(
@@ -248,50 +225,6 @@ class _MySearchPage extends State<SearchPage> {
                                         );
                                       },
                                     );
-                                    /*
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text("Sort by"),
-                              content: DropdownButtonFormField(
-                                value: selectedValue,
-                                items: options,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    selectedValue = value!.toString();
-                                    switch (value) {
-                                      case "Default":
-                                        originalList();
-                                        break;
-                                      case "Alphabetically (Descending)":
-                                        setState(() {
-                                          requestedList = sortAlphaDesc();
-                                        });
-                                        break;
-                                      case "Alphabetically (Ascending)":
-                                        setState(() {
-                                          requestedList = sortAlphaAsc();
-                                        });
-                                        break;
-                                      default:
-                                        break;
-                                    }
-                                  });
-                                },
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context, 'Continue');
-                                  },
-                                  child: const Text("Continue"),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                        */
                                   },
                                 ),
                               ),
@@ -310,18 +243,11 @@ class _MySearchPage extends State<SearchPage> {
                               child: ListView.builder(
                                   itemCount: snapshot.data.length,
                                   itemBuilder: (ctx, index) {
-                                    /*
-                                    String s = snapshot.data[index]['url_rss'];
-                                    final rp = await dio.get(snapshot.data[index]['url_rss']);
-                                    List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
-                                    */
-                                    //final rssString = dio.get(snapshot.data[index]['url_rss']);
                                     if (snapshot.data[index]['title']
                                         .contains(searchText)) {
-                                      //
+                                      //Displays a list of books based on search results.
                                       return ListTile(
-                                        //title: Text(snapshot.data[index]['title']));
-                                        //
+                                        //Redirects the user to the book information page.
                                         title: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -343,7 +269,6 @@ class _MySearchPage extends State<SearchPage> {
                                           },
                                           style: ElevatedButton.styleFrom(
                                             shape: const ContinuousRectangleBorder(),
-                                            //backgroundColor: Colors.grey.shade50,
                                             minimumSize: const Size.fromHeight(50),
                                           ),
                                           child: Text(snapshot.data[index]['title']),
@@ -353,11 +278,11 @@ class _MySearchPage extends State<SearchPage> {
                                     return null;
                                   }),
                             );
-                            //Displays if search result is incorrect
+                            //Displays an error to indicate that the search result is incorrect.
                           } else if (snapshot.hasError) {
                             return const Center(
                                 child: Text("No results"));
-                            //Displays if connection is unavailable
+                            //Displays an error to indicate that the user is currently disconnected from the Internet.
                           } else if (snapshot.data == null) {
                             return const Center(child: Text("Database currently not available"));
                           }

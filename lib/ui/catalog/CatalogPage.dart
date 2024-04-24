@@ -7,8 +7,10 @@ import 'BooksListPage.dart';
 import 'AuthorsListPage.dart';
 import 'GenresListPage.dart';
 import '../BookInformationPage.dart';
-
+//Class to display the catalog of books available for viewing.
 class CatalogPage extends StatefulWidget {
+
+  //Class constructor
   const CatalogPage({super.key});
 
   @override
@@ -18,7 +20,7 @@ class CatalogPage extends StatefulWidget {
 class _MyCatalogPageState extends State<CatalogPage> {
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
-  //Temporary method used for displaying books in FutureBuilder
+  //Temporary method used for displaying books in FutureBuilder.
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -53,12 +55,12 @@ class _MyCatalogPageState extends State<CatalogPage> {
                           Container(
                               child: Column(
                                 children: [
-                                  //Navigates to the downloads page
                                   Row(
                                     children: [
                                       const Text("Recommended"),
                                       const Spacer(),
                                       TextButton (
+                                        //Redirects the user to the recommendations page
                                         onPressed: () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => const RecommendationsPage()));
                                         },
@@ -84,23 +86,23 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                               future: getRequest(),
                                               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                                                 if (snapshot.data == null) {
+                                                  //Displays an error to indicate that the API is currently not available.
                                                   return Container(
                                                     padding: const EdgeInsets.all(80),
                                                     child: const Center(
-                                                      //child: CircularProgressIndicator(),
                                                       child: Text("Database currently not available"),
                                                     ),
                                                   );
                                                 } else {
+                                                  //Displays a list of books.
                                                   return ListView.builder(
                                                     scrollDirection: Axis.horizontal,
-                                                    //controller: _scrollController,
                                                     itemCount: snapshot.data.length,
                                                     itemBuilder: (ctx, index) => Card(
                                                       child: SizedBox.square(
                                                         dimension: 150,
                                                         child: ListTile(
-                                                          //
+                                                          //Redirects the user to the book information page.
                                                           title: ElevatedButton(
                                                             onPressed: () {
                                                               Navigator.push(
@@ -122,7 +124,6 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                                               },
                                                             style: ElevatedButton.styleFrom(
                                                               shape: const ContinuousRectangleBorder(),
-                                                              //backgroundColor: Colors.grey.shade50,
                                                               minimumSize: const Size.fromHeight(50),
                                                             ),
                                                             child: Text(snapshot.data[index]['title']),
@@ -141,7 +142,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                                 ],
                               )
                           ),
-                          //Navigates to the browse all page
+                          //Redirects the user to the browse all page.
                           Center(
                             child: OutlinedButton(
                               onPressed: () {
@@ -155,7 +156,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                               child: const Text ("Browse All Books", style: TextStyle(color: Colors.black)),
                             ),
                           ),
-                          //Navigates to the browse authors page
+                          //Redirects the user to the browse authors page.
                           Center(
                             child: OutlinedButton(
                               onPressed: () {
@@ -169,7 +170,7 @@ class _MyCatalogPageState extends State<CatalogPage> {
                               child: const Text ("Browse Authors", style: TextStyle(color: Colors.black)),
                             ),
                           ),
-                          //Navigates to the browse genres page
+                          //Redirects the user to the browse genres page.
                           Center(
                             child: OutlinedButton(
                               onPressed: () {

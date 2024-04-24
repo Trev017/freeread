@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
-
+//Class to configure the theme of the application.
 class AppearanceSettingsPage extends StatefulWidget {
+
+  //Class constructor
   const AppearanceSettingsPage({super.key});
 
   @override
@@ -26,7 +28,7 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
         padding: const EdgeInsets.all(80),
         child: Column(
           children: [
-            //Sets the application's appearance to the current theme of the device
+            //Sets the application's appearance to the current theme of the device.
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -47,7 +49,7 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
               ),
             ),
             const Spacer(),
-            //Sets the application's appearance to light mode
+            //Sets the application's appearance to light mode.
             Center(
               child: ElevatedButton(
                 onPressed: () {
@@ -68,7 +70,7 @@ class _MyAppearanceSettingsPage extends State<AppearanceSettingsPage> {
               ),
             ),
             const Spacer(),
-            //Sets the application's appearance to dark mode
+            //Sets the application's appearance to dark mode.
             Center(
               child: ElevatedButton(
                 onPressed: () {

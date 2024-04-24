@@ -1,9 +1,11 @@
 import 'BookModelClass.dart';
 import 'package:hive/hive.dart';
 
+//Class containing methods to perform Hive functions.
 class BookModelMethods {
   String hiveBox = 'hive_local_db';
 
+  //Adds an audiobook to the Hive box.
   void addBook(BookModel bookModel) async {
     var box = await Hive.openBox(hiveBox);
     var mapBookData = bookModel.toMap(bookModel);
@@ -11,6 +13,7 @@ class BookModelMethods {
     Hive.close();
   }
 
+  //Gets a list of audiobooks from the Hive box.
   Future<List<BookModel>> getBookList() async {
     var box = await Hive.openBox(hiveBox);
     List<BookModel> books = [];
@@ -21,6 +24,7 @@ class BookModelMethods {
     return books;
   }
 
+  //Checks if the Hive box contains data.
   Future<bool> containsBooks() async {
     var box = await Hive.openBox(hiveBox);
     if (box.isNotEmpty) {
@@ -30,6 +34,7 @@ class BookModelMethods {
     }
   }
 
+  //Removes all audiobooks in the Hive box.
   void deleteAll() async {
     var box = await Hive.openBox(hiveBox);
     await box.clear();

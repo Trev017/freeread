@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-
+//Class where a button widgets are developed.
 class PlayerButtons extends StatelessWidget {
+
+  //Class variables
   final AudioPlayer? audioPlayer;
+
+  //Class constructor
   const PlayerButtons({
     super.key,
     this.audioPlayer,

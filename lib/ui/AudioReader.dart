@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:provider/provider.dart';
 import 'AudioProvider.dart';
 import 'PlayerButtons.dart';
 import 'PlaylistBuilder.dart';
-
+//Class where audio of books could be played.
 class AudioReader extends StatefulWidget {
+
+  //Class variables
   final String? audioBookTitle;
   final String? audioBookAuthor;
   final String? audioBookChapter;
   final int? audioBookDuration;
 
+  //Class constructor
   const AudioReader({
     super.key,
     this.audioBookTitle,
@@ -37,6 +39,7 @@ class _MyAudioReaderPageState extends State<AudioReader> {
     super.initState();
     audioPlayer = AudioPlayer();
     audioPlayer.setAudioSource(
+      //Currently utilizing data taken from API and hard-coded for demonstration of audio features.
       ConcatenatingAudioSource(
           children: [
             AudioSource.uri(
@@ -138,9 +141,8 @@ class _MyAudioReaderPageState extends State<AudioReader> {
       appBar: AppBar(
         //
       ),
-      //backgroundColor: Colors.yellow.shade100,
       body: Padding(
-        //Builds view for the audioplayer
+        //Builds view for the audio player
         padding: const EdgeInsets.all(20),
         child: Flexible(
           child: SafeArea(
@@ -166,6 +168,7 @@ class _MyAudioReaderPageState extends State<AudioReader> {
                     ),
                     const Spacer(),
                     IconButton(
+                      //Alert dialog to display the speed configuration option.
                       icon: const Icon(Icons.flash_on_sharp),
                       iconSize: 40,
                       onPressed: () {
@@ -187,7 +190,6 @@ class _MyAudioReaderPageState extends State<AudioReader> {
                                             value: speedValue,
                                             onChanged: (value) {
                                               speedValue = value;
-                                              //textValue = "${textValue}: {$speedValue}";
                                               audioPlayer.setSpeed(speedValue);
                                             },
                                           );
@@ -212,42 +214,6 @@ class _MyAudioReaderPageState extends State<AudioReader> {
                 ),
                 ProgressBar(progress: Duration.zero, total: Duration(seconds: widget.audioBookDuration ?? 5)),
                 PlayerButtons(audioPlayer: audioPlayer,),
-                /*
-            Row(
-              children: [
-                const Spacer(),
-                Center(
-                  child: IconButton(icon: const Icon(Icons.fast_rewind), iconSize: 40, onPressed: () {}),
-                ),
-                Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      IconButton(icon: const Icon(Icons.rotate_left), iconSize: 40, onPressed: () {}),
-                      Text("15"),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: IconButton(icon: const Icon(Icons.play_arrow), iconSize: 40, onPressed: () {}),
-                ),
-                Center(
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      IconButton(icon: const Icon(Icons.rotate_right), iconSize: 40, onPressed: () {}),
-                      Text("15"),
-                    ],
-                  ),
-                ),
-                Center(
-                  child: IconButton(icon: const Icon(Icons.fast_forward), iconSize: 40, onPressed: () {}),
-                ),
-                const Spacer(),
-              ],
-            ),
-            */
-                //
               ],
             ),
           ),

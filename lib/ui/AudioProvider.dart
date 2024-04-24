@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+//Class utilized for state management of selecting audiobooks.
 class AudioProvider extends ChangeNotifier {
   String? audioBookTitle;
   String? audioBookAuthor;

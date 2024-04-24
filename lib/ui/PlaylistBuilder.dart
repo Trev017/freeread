@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-
+//Class where a list can be compiled to be a playlist.
 class PlaylistBuilder extends StatelessWidget {
+
+  //Class variables
   final AudioPlayer? audioPlayer;
+
+  //Class constructor
   const PlaylistBuilder({
     super.key,
     this.audioPlayer,

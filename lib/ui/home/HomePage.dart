@@ -7,8 +7,10 @@ import 'DownloadsPage.dart';
 import '../BookInformationPage.dart';
 import '../../model/BookModelClass.dart';
 import '../../model/BookModelMethods.dart';
-
+//Class to display the home page.
 class HomePage extends StatefulWidget {
+
+  //Class constructor
   const HomePage({super.key});
 
   @override
@@ -20,50 +22,23 @@ class _MyHomePageState extends State<HomePage> {
   OnlineService onlineService = OnlineService();
   final BookModelMethods bookModelMethods = BookModelMethods();
   List<BookModel> books = [];
-  //final ScrollController _scrollController = ScrollController();
-  //Temporary method used for displaying books in FutureBuilder
+  /*
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
+  */
 
+  //Gets all books in the Hive box.
   void getHiveBooks() async {
     var booksData = await bookModelMethods.getBookList();
     books.addAll(booksData);
   }
 
-  /*
-  Future<String?> getRssImage(String s) async {
-    final client = http.Client();
-    final response = await client.get(Uri.parse(s));
-    final feed = RssFeed.parse(response.body);
-    final imageUrl = feed.itunes?.image?.href;
-    return imageUrl;
-  }
-  */
-
-  /*
-  Future<List> getAudioList(String s) async {
-    await Future.delayed(Duration(seconds: 1));
-    List? mp3List = [];
-    final client = http.Client();
-    final response = await client.get(Uri.parse(s));
-    final feed = RssFeed.parse(response.body);
-    final List? rssList = feed.items;
-    for (int x = 0; x < rssList!.length; x++) {
-      RssItem rssElement = rssList.elementAt(x);
-      var contentElement = rssElement.media?.contents!.elementAt(0);
-      String? mp3url = contentElement?.url;
-      mp3List.add(mp3url);
-    }
-    return mp3List;
-  }
-  */
-
   @override
   void initState() {
-    getRequest();
+    //getRequest();
     getHiveBooks();
     super.initState();
   }
@@ -90,12 +65,12 @@ class _MyHomePageState extends State<HomePage> {
                           Container(
                               child: Column(
                                 children: [
-                                  //Navigates to the downloads page
                                   Row(
                                     children: [
                                       const Text("Your Downloads"),
                                       const Spacer(),
                                       TextButton (
+                                        //Redirects the user to the downloads page.
                                         onPressed: () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => const DownloadsPage()));
                                         },
@@ -121,15 +96,15 @@ class _MyHomePageState extends State<HomePage> {
                                               future: bookModelMethods.getBookList(),
                                               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                                                 if (snapshot.data == null) {
+                                                  //Displays an error to indicate that the box is empty.
                                                   return Container(
                                                     padding: const EdgeInsets.all(80),
                                                     child: const Center(
-                                                      //child: CircularProgressIndicator(),
-                                                      //child: Text("Database currently not available"),
                                                       child: Text("Database currently empty. Mark a book as your favorite."),
                                                     ),
                                                   );
                                                 } else {
+                                                  //Displays a list of books.
                                                   return ListView.builder(
                                                     scrollDirection: Axis.horizontal,
                                                     itemCount: snapshot.data.length,
@@ -138,6 +113,7 @@ class _MyHomePageState extends State<HomePage> {
                                                         child: SizedBox.square(
                                                           dimension: 140,
                                                           child: ListTile(
+                                                            //Redirects the user to the book information page.
                                                             title: ElevatedButton(
                                                               onPressed: () {
                                                                 Navigator.push(
@@ -164,10 +140,6 @@ class _MyHomePageState extends State<HomePage> {
                                                                 //backgroundColor: Colors.grey.shade50,
                                                                 minimumSize: const Size.fromHeight(50),
                                                               ),
-                                                              /*
-                                                              icon: Image.network(bookRss),
-                                                              label: Text(snapshot.data[index]['title']),
-                                                            */
                                                               child: Text(snapshot.data[index].title),
                                                             ),
                                                           ),
@@ -188,12 +160,12 @@ class _MyHomePageState extends State<HomePage> {
                           Container(
                               child: Column(
                                 children: [
-                                  //Navigates to the favorites page
                                   Row(
                                     children: [
                                       const Text("Your Favorites"),
                                       const Spacer(),
                                       TextButton (
+                                        //Redirects the user to the favorites page.
                                         onPressed: () {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => const FavoritesPage()));
                                         },
@@ -219,15 +191,15 @@ class _MyHomePageState extends State<HomePage> {
                                               future: bookModelMethods.getBookList(),
                                               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                                                 if (snapshot.data == null) {
+                                                  //Displays an error to indicate that the box is empty.
                                                   return Container(
                                                     padding: const EdgeInsets.all(80),
                                                     child: const Center(
-                                                      //child: CircularProgressIndicator(),
-                                                      //child: Text("Database currently not available"),
                                                       child: Text("Database currently empty. Mark a book as your favorite."),
                                                     ),
                                                   );
                                                 } else {
+                                                  //Displays a list of books.
                                                   return ListView.builder(
                                                       scrollDirection: Axis.horizontal,
                                                       itemCount: snapshot.data.length,
@@ -236,6 +208,7 @@ class _MyHomePageState extends State<HomePage> {
                                                           child: SizedBox.square(
                                                             dimension: 140,
                                                             child: ListTile(
+                                                              //Redirects the user to the book information page.
                                                               title: ElevatedButton(
                                                                 onPressed: () {
                                                                   Navigator.push(
@@ -262,10 +235,6 @@ class _MyHomePageState extends State<HomePage> {
                                                                   //backgroundColor: Colors.grey.shade50,
                                                                   minimumSize: const Size.fromHeight(50),
                                                                 ),
-                                                                /*
-                                                              icon: Image.network(bookRss),
-                                                              label: Text(snapshot.data[index]['title']),
-                                                            */
                                                                 child: Text(snapshot.data[index].title),
                                                               ),
                                                             ),

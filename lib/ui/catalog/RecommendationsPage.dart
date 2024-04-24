@@ -4,8 +4,10 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
-
+//Class to display a recommended list of books.
 class RecommendationsPage extends StatefulWidget {
+
+  //Class constructor
   const RecommendationsPage({super.key});
 
   @override
@@ -13,6 +15,19 @@ class RecommendationsPage extends StatefulWidget {
 }
 
 class _MyRecommendationsPageState extends State<RecommendationsPage> {
+  String selectedValue = "Default";
+
+  //List to contain the sort options.
+  List<DropdownMenuItem<String>> get options {
+    List<DropdownMenuItem<String>> dropdownList = [
+      const DropdownMenuItem(value: "Default", child: Text("Default")),
+      const DropdownMenuItem(value: "Alphabetically (Ascending)", child: Text("Alphabetically (Ascending)")),
+      const DropdownMenuItem(value: "Alphabetically (Descending)", child: Text("Alphabetically (Descending)")),
+    ];
+    return dropdownList;
+  }
+  late Future<dynamic> requestedList = Future.value([]);
+
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
   //Temporary method used for displaying books in FutureBuilder
@@ -24,8 +39,39 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
 
   @override
   void initState() {
-    getRequest();
+    requestedList = getRequest();
     super.initState();
+  }
+
+  //Gets the original list obtained from the GET request.
+  Future<void> originalList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      requestedList = getRequest();
+    });
+  }
+
+  //Sorts the list in descending order.
+  Future<List<dynamic>> sortAlphaDesc() async {
+    List<dynamic> rl = await requestedList;
+    //Map mrl = rl.asMap();
+    Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
+    List<dynamic> listToSort = mrl.entries.toList()..sort(
+            (a, b) {
+          return b.value["title"].compareTo(a.value["title"]);
+        });
+    return listToSort;
+  }
+
+  //Sorts the list in ascending order.
+  Future<List<dynamic>> sortAlphaAsc() async {
+    List<dynamic> rl = await requestedList;
+    Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
+    List<dynamic> listToSort = mrl.entries.toList()..sort(
+            (a, b) {
+          return a.value["title"].compareTo(b.value["title"]);
+        });
+    return listToSort;
   }
 
   @override
@@ -40,34 +86,87 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
                 Navigator.pop(context);
               }
           ),
+          actions: [
+            //Alert dialog to display the sorting options.
+            TextButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Sort by"),
+                      content: DropdownButtonFormField(
+                        value: selectedValue,
+                        items: options,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedValue = value!.toString();
+                            switch (value) {
+                              case "Default":
+                                originalList();
+                                break;
+                              case "Alphabetically (Descending)":
+                                setState(() {
+                                  requestedList = sortAlphaDesc();
+                                });
+                                break;
+                              case "Alphabetically (Ascending)":
+                                setState(() {
+                                  requestedList = sortAlphaAsc();
+                                });
+                                break;
+                              default:
+                                originalList();
+                                break;
+                            }
+                          });
+                        },
+                      ),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context, 'Continue');
+                          },
+                          child: const Text("Continue"),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text("Sort",),
+            ),
+          ],
         ),
         body: Container(
           padding: const EdgeInsets.all(10),
           //Vertical list builder
           child: FutureBuilder(
-              future: getRequest(),
+              future: requestedList,
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
+                  //Displays an error to indicate that the API is currently not available.
                   return Container(
                     child: const Center(
-                      //child: CircularProgressIndicator(),
                       child: Text("Database currently not available"),
                     ),
                   );
                 } else if (snapshot.hasError && snapshot.error is SocketException) {
+                  //Displays an error to indicate that the user is currently disconnected from the Internet.
                   return Container(
                     child: const Center(
                       child: Text("Please connect to the Internet"),
                     ),
                   );
                 } else {
+                  //Displays a list of books.
                   return GridView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (ctx, index) => Card(
                       child: SizedBox.square(
                         dimension: 45,
                         child: ListTile(
-                          //
+                          //Redirects the user to the book information page.
                           title: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -94,7 +193,6 @@ class _MyRecommendationsPageState extends State<RecommendationsPage> {
                             ),
                             child: Text(snapshot.data[index]['title']),
                           ),
-                          //
                         ),
                       ),
                     ),

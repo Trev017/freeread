@@ -5,8 +5,10 @@ import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
 import '../../model/BookModelClass.dart';
 import '../../model/BookModelMethods.dart';
-
+//Class to display list of books stored offline.
 class DownloadsPage extends StatefulWidget {
+
+  //Class constructor
   const DownloadsPage({super.key});
 
   @override
@@ -14,17 +16,31 @@ class DownloadsPage extends StatefulWidget {
 }
 
 class _MyDownloadsPageState extends State<DownloadsPage> {
+  String selectedValue = "Default";
+
+  //List to contain the sort options.
+  List<DropdownMenuItem<String>> get options {
+    List<DropdownMenuItem<String>> dropdownList = [
+      const DropdownMenuItem(value: "Default", child: Text("Default")),
+      const DropdownMenuItem(value: "Alphabetically (Ascending)", child: Text("Alphabetically (Ascending)")),
+      const DropdownMenuItem(value: "Alphabetically (Descending)", child: Text("Alphabetically (Descending)")),
+    ];
+    return dropdownList;
+  }
+  late Future<dynamic> requestedList = Future.value([]);
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
   final BookModelMethods bookModelMethods = BookModelMethods();
   List<BookModel> books = [];
-  //Temporary method used for displaying books in FutureBuilder
+  /*
   Future getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
     return books;
   }
+  */
 
+  //Gets all books in the Hive box.
   void getHiveBooks() async {
     var booksData = await bookModelMethods.getBookList();
     books.addAll(booksData);
@@ -32,9 +48,40 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
 
   @override
   void initState() {
-    getRequest();
+    //getRequest();
     getHiveBooks();
+    requestedList = bookModelMethods.getBookList();
     super.initState();
+  }
+
+  //Gets the original list obtained from the getter method.
+  Future<void> originalList() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      requestedList = bookModelMethods.getBookList();
+    });
+  }
+
+  //Sorts the list in descending order.
+  Future<List<dynamic>> sortAlphaDesc() async {
+    List<dynamic> rl = await requestedList;
+    Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
+    List<dynamic> listToSort = mrl.entries.toList()..sort(
+            (a, b) {
+          return b.value["title"].compareTo(a.value["title"]);
+        });
+    return listToSort;
+  }
+
+  //Sorts the list in ascending order.
+  Future<List<dynamic>> sortAlphaAsc() async {
+    List<dynamic> rl = await requestedList;
+    Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
+    List<dynamic> listToSort = mrl.entries.toList()..sort(
+            (a, b) {
+          return a.value["title"].compareTo(b.value["title"]);
+        });
+    return listToSort;
   }
 
   @override
@@ -50,6 +97,7 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
               }
           ),
           actions: [
+            //Alert dialog to display options to delete or sort.
             TextButton(
               onPressed: () {
                 showDialog(
@@ -57,7 +105,6 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: const Text("Edit Your Database"),
-                      //content: const Text("Delete All Entries"),
                       actions: <Widget>[
                         Column(
                           children: [
@@ -66,6 +113,7 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {
+                                      //Deletes all audiobooks in Hive box.
                                       return AlertDialog(
                                         title: const Text("Delete All Entries"),
                                         content: const Text("This action is irreversible. Would you like to continue?"),
@@ -88,9 +136,56 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                                       );
                                     }
                                 );
-                                //Navigator.pop(context, 'Proceed');
                               },
                               child: const Text("Delete All Entries"),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: const Text("Sort by"),
+                                      content: DropdownButtonFormField(
+                                        value: selectedValue,
+                                        items: options,
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            selectedValue = value!.toString();
+                                            switch (value) {
+                                              case "Default":
+                                                originalList();
+                                                break;
+                                              case "Alphabetically (Descending)":
+                                                setState(() {
+                                                  requestedList = sortAlphaDesc();
+                                                });
+                                                break;
+                                              case "Alphabetically (Ascending)":
+                                                setState(() {
+                                                  requestedList = sortAlphaAsc();
+                                                });
+                                                break;
+                                              default:
+                                                originalList();
+                                                break;
+                                            }
+                                          });
+                                        },
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.pop(context, 'Continue');
+                                          },
+                                          child: const Text("Continue"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: const Text("Sort",),
                             ),
                             TextButton(
                               onPressed: () {
@@ -114,15 +209,17 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
           padding: const EdgeInsets.all(10),
           //Vertical list builder
           child: FutureBuilder(
-              future: bookModelMethods.getBookList(),
+              future: requestedList,
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.hasData == false || bookModelMethods.containsBooks() == false || snapshot.data == null) {
+                  //Displays an error to indicate that the box is empty.
                   return Container(
                     child: const Center(
                       child: Text("Database currently empty. Mark a book as your favorite."),
                     ),
                   );
                 } else {
+                  //Displays a list of books.
                   return GridView.builder(
                     itemCount: snapshot.data.length,
                     itemBuilder: (ctx, index) {
@@ -130,7 +227,7 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                         child: SizedBox.square(
                           dimension: 45,
                           child: ListTile(
-                            //
+                            //Redirects the user to the book information page.
                             title: ElevatedButton(
                               onPressed: () {
                                 Navigator.push(
@@ -154,12 +251,10 @@ class _MyDownloadsPageState extends State<DownloadsPage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: const ContinuousRectangleBorder(),
-                                //backgroundColor: Colors.grey.shade50,
                                 minimumSize: const Size.fromHeight(50),
                               ),
                               child: Text(snapshot.data[index].title),
                             ),
-                            //
                           ),
                         ),
                       );

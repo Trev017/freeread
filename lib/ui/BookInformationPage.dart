@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
-//import 'package:webfeed/webfeed.dart';
 import 'AudioProvider.dart';
 import 'catalog/AuthorInformationPage.dart';
 import '../model/BookModelClass.dart';
 import '../model/BookModelMethods.dart';
-
+//Class to display information of an audiobook.
 class BookInformationPage extends StatefulWidget {
+
+  //Class variables
   final String bookId;
   final String bookTitle;
   final String bookDescription;
@@ -20,6 +19,7 @@ class BookInformationPage extends StatefulWidget {
   final List bookAuthor;
   final List bookChapters;
 
+  //Class constructor
   const BookInformationPage(
       {
         super.key,
@@ -45,80 +45,36 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
   var audioprov;
   final BookModelMethods bookModelMethods = BookModelMethods();
 
+  //Converts seconds to the hours, minutes, and seconds format.
   String convertTotalSeconds(int x) {
-    //String parsedTotalSeconds = int.parse(x);
     final convertTotalSeconds = Duration(seconds: x);
     return convertTotalSeconds.toString();
   }
 
+  //Gets the first name from the author variable.
   String getFirstName() {
     return widget.bookAuthor[0]['first_name'];
   }
 
+  //Gets the last name from the author variable.
   String getLastName() {
     return widget.bookAuthor[0]['last_name'];
   }
 
-  /*
-  Future<String?> getRssImage() async {
-    final client = http.Client();
-    final response = await client.get(Uri.parse(widget.bookRss));
-    final feed = RssFeed.parse(response.body);
-    final imageUrl = feed.itunes?.image?.href;
-    return imageUrl;
-  }
-  */
-
-  /*
-  Future<List> getAudioList() async {
-    await Future.delayed(const Duration(seconds: 1));
-    List? mp3List = [];
-    final client = http.Client();
-    final response = await client.get(Uri.parse(widget.bookRss));
-    final feed = RssFeed.parse(response.body);
-    final List? rssList = feed.items;
-    for (int x = 0; x < rssList!.length; x++) {
-      RssItem rssElement = rssList.elementAt(x);
-      var contentElement = rssElement.media?.contents!.elementAt(0);
-      String? mp3url = contentElement?.url;
-      mp3List.add(mp3url);
-    }
-    return mp3List;
-  }
-  */
-  /*
-  List parseList() {
-    List apiList = [];
-    getAudioList().then((value) {
-      for (var c in value) {
-        apiList.add(c);
-      }
-        });
-    return apiList;
-  }
-  */
-  //
-
+  //Adds data about the book to the Hive box.
   void addtoFavorites(BookModel bookModel) {
     bookModelMethods.addBook(bookModel);
   }
 
   @override
   void initState() {
-    /*
-    getAudioList().then((value) {
-      convertChapterList = value;
-          return convertChapterList;
-    });
-    */
     super.initState();
   }
 
-  //
   @override
   Widget build(BuildContext context) {
     List widgetList = [
-      //Description
+      //Summary description of the audiobook.
       Expanded(
         flex: 1,
         child: SingleChildScrollView(
@@ -132,11 +88,10 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
           ),
         ),
       ),
-      //Chapters
+      //List of chapters of the audiobook.
       Expanded(
         flex: 1,
         child: Wrap(
-          //direction: Axis.vertical,
           children: [
             ListView.builder(
                 shrinkWrap: true,
@@ -145,32 +100,6 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   String apiChapterSeconds = widget.bookChapters[index]['playtime'];
                   int parsedChapterSeconds = int.parse(apiChapterSeconds);
                   final convertChapterSeconds = Duration(seconds: parsedChapterSeconds);
-
-                  //Future<List> apiChapterList = getAudioList();
-                  //apiChapterList.then((value) => null);
-                  /*
-                  Future<List> apiChapterList = getAudioList().then((value) {
-                    if (value is List) {
-                      convertChapterList = value;
-                    }
-                    return convertChapterList;
-                    /*
-                    return value.forEach((element) {
-                      convertChapterList.add(element);
-                      return convertChapterList;
-                    });
-                    */
-                  });
-                  */
-                  /*
-                  List convertChapterList = [];
-                  List apiChapterList = getAudioList().then((dynamic value) {
-                    List<dynamic> listData = value;
-                    //
-                  });
-                  */
-                  //List apiChapterList = parseList();
-                  //apiChapterList.elementAt(index);
                   audioprov = Provider.of<AudioProvider>(context);
                   return ListTile(
                     title: Text(widget.bookChapters[index]['title']),
@@ -182,12 +111,6 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                             icon: const Icon(Icons.play_arrow),
                             onPressed: () {
                               audioprov.setAudioBookAuthor(widget.bookTitle);
-                              //context.read<AudioProvider>().setAudioBookAuthor(widget.bookTitle);
-                              /*
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                                return AudioReader(audioBookTitle: widget.bookTitle);
-                              }));
-                              */
                             }
                         ),
                         Tooltip(
@@ -195,7 +118,21 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                           child: IconButton(
                             icon: const Icon(Icons.file_download_outlined),
                             onPressed: () {
-                              //
+                              setState(() {
+                                BookModel addedFavorite = BookModel(
+                                    id: widget.bookId,
+                                    title: widget.bookTitle,
+                                    description: widget.bookDescription,
+                                    language: widget.bookLanguage,
+                                    copyright_year: widget.bookYear,
+                                    url_rss: widget.bookRss,
+                                    totaltimesecs: widget.bookTotalTime,
+                                    author: widget.bookAuthor,
+                                    chapters: widget.bookChapters
+                                );
+                                addtoFavorites(addedFavorite);
+                              }
+                              );
                             },
                           ),
                         ),
@@ -223,7 +160,21 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                 child: IconButton(
                   icon: const Icon(Icons.file_download_outlined),
                   onPressed: () {
-                    //
+                    setState(() {
+                      BookModel addedFavorite = BookModel(
+                          id: widget.bookId,
+                          title: widget.bookTitle,
+                          description: widget.bookDescription,
+                          language: widget.bookLanguage,
+                          copyright_year: widget.bookYear,
+                          url_rss: widget.bookRss,
+                          totaltimesecs: widget.bookTotalTime,
+                          author: widget.bookAuthor,
+                          chapters: widget.bookChapters
+                      );
+                      addtoFavorites(addedFavorite);
+                    }
+                    );
                   },
                 ),
               )
@@ -244,9 +195,8 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                     children: [
                       Column(
                         children: [
-                          //Book Cover
+                          //Container to display the audiobook title.
                           Expanded(
-                            //flex: 3,
                             child: Container(
                               width: MediaQuery.sizeOf(context).width * 0.3,
                               height: MediaQuery.sizeOf(context).height * 0.1,
@@ -261,7 +211,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                       const Spacer(),
                       Column(
                         children: [
-                          //Title
+                          //Container to display the audiobook title.
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -275,7 +225,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                               ),
                             ),
                           ),
-                          //Author
+                          //Container to display the author.
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -285,6 +235,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                                 border: Border.all(width: 1),
                               ),
                               child: OutlinedButton(
+                                //Redirects the user to the author information page.
                                 onPressed: () {
                                   Navigator.push(
                                       context,
@@ -298,14 +249,12 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                                 },
                                 style: OutlinedButton.styleFrom(
                                   shape: const ContinuousRectangleBorder(),
-                                  //backgroundColor: Colors.grey.shade50,
-                                  //minimumSize: Size.fromHeight(90),
                                 ),
                                 child: Text ("By: ${getFirstName()} ${getLastName()}"),
                               ),
                             ),
                           ),
-                          //Total Time
+                          //Container to display the total time.
                           Expanded(
                             flex: 1,
                             child: Container(
@@ -324,7 +273,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                       const Spacer(),
                       Column(
                         children: [
-                          //Play
+                          //Button to start the audiobook from playing in the beginning.
                           Container(
                             width: MediaQuery.sizeOf(context).width * 0.2,
                             height: MediaQuery.sizeOf(context).height * 0.1,
@@ -335,19 +284,13 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                               },
                               style: OutlinedButton.styleFrom(
                                 shape: const ContinuousRectangleBorder(),
-                                //backgroundColor: Colors.grey.shade50,
-                                //minimumSize: Size.fromHeight(90),
                               ),
                               child: const Text ("Start Listening"),
                             ),
                           ),
                           const Spacer(),
-                          //Like
+                          //Button to mark the book as a favorite.
                           Container(
-                            /*
-                            width: MediaQuery.sizeOf(context).width * 0.2,
-                            height: MediaQuery.sizeOf(context).height * 0.1,
-                            */
                             padding: const EdgeInsets.all(25),
                             child: Tooltip(
                               message: "Mark as favorite",
@@ -380,8 +323,7 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   ),
                 ),
               ),
-              //const Spacer(),
-              //ButtonBar
+              //ButtonBar to select whether to view the description or the chapters.
               Expanded(
                 flex: 5,
                 child: Container(
@@ -393,38 +335,6 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                   ),
                   child: Row(
                     children: [
-                      /*
-                      Center(
-                        child: Column(
-                          children: [
-                            //ButtonBar
-                            Container(
-                              //padding: const EdgeInsets.all(5),
-                              width: MediaQuery.sizeOf(context).width * 0.9,
-                              child: CupertinoSegmentedControl(
-                                onValueChanged: (int i) {
-                                  setState(() {
-                                    currentPageIndex = i;
-                                  });
-                                },
-                                selectedColor: Colors.brown,
-                                children: const <int, Widget> {
-                                  0: Text("Description"),
-                                  1: Text("Chapters"),
-                                },
-                              ),
-                            ),
-                            SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Container(
-                                width: MediaQuery.sizeOf(context).width * 0.9,
-                                child: widgetList[currentPageIndex],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      */
                       SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Column(
@@ -449,16 +359,6 @@ class _MyBookInformationPagePage extends State<BookInformationPage> {
                               ),
                             ),
                             Center(
-                              /*
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Container(
-                                  width: MediaQuery.sizeOf(context).width * 0.9,
-                                  child: widgetList[currentPageIndex],
-                                ),
-                              ),
-                              */
-                              //
                               child: SizedBox(
                                 width: MediaQuery.sizeOf(context).width * 0.9,
                                 child: widgetList[currentPageIndex],

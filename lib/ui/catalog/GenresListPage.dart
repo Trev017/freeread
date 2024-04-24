@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'BooksListGenresPage.dart';
-
+//Class to display the list of genres.
 class GenresListPage extends StatefulWidget {
+
+  //Class constructor
   const GenresListPage({super.key});
 
   @override
@@ -10,6 +12,7 @@ class GenresListPage extends StatefulWidget {
 
 class _MyGenresListPage extends State<GenresListPage> {
 
+  //List to contain the sort options.
   final List<String> listofGenres = [
     "Children's Fiction",
     "Children's Non-fiction",
@@ -58,10 +61,13 @@ class _MyGenresListPage extends State<GenresListPage> {
       ),
       body: Container(
         padding: const EdgeInsets.all(80),
+        //Vertical list builder
         child: ListView.builder(
             itemCount: listofGenres.length,
             itemBuilder: (context, index) {
+              //Displays a list of genres.
               return ListTile(
+                //Redirects the user to the book list genres page.
                 title: ElevatedButton(
                   onPressed: () {
                     Navigator.push(

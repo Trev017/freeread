@@ -2,9 +2,11 @@ import 'package:hive/hive.dart';
 
 part 'BookModelClass.g.dart';
 
+//Model class used for converting API data to audiobooks to store in a Hive box.
 @HiveType(typeId: 0)
 class BookModel {
 
+  //Class variables
   @HiveField(0)
   late String id;
   @HiveField(1)
@@ -24,6 +26,7 @@ class BookModel {
   @HiveField(8)
   late List chapters;
 
+  //Class constructor
   BookModel({
     required this.id,
     required this.title,
@@ -31,12 +34,12 @@ class BookModel {
     required this.language,
     required this.copyright_year,
     required this.url_rss,
-    //required this.url_zip_file,
     required this.totaltimesecs,
     required this.author,
     required this.chapters,
   });
 
+  //Converts an audiobook model in Hive to a Map.
   Map<String, dynamic> toMap(BookModel bm) {
     Map<String, dynamic> bookModelClassMap = Map();
     bookModelClassMap["id"] = bm.id;
@@ -51,6 +54,7 @@ class BookModel {
     return bookModelClassMap;
   }
 
+  //Converts a Map to an audiobook model in Hive.
   factory BookModel.fromMap(Map<String, dynamic> bookMapJson) {
     return BookModel(
         id: bookMapJson['id'],

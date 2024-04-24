@@ -4,8 +4,10 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 import '../../services/OnlineService.dart';
 import '../BookInformationPage.dart';
-
+//Class to display the entire list of books.
 class BooksListPage extends StatefulWidget {
+
+  //Class constructor
   const BooksListPage({super.key});
 
   @override
@@ -14,8 +16,8 @@ class BooksListPage extends StatefulWidget {
 
 class _MyBooksListPageState extends State<BooksListPage> {
   String selectedValue = "Default";
-  //String alphaDesc = "Alphabetically (Descending)";
-  //String alphaAsc = "Alphabetically (Ascending)";
+
+  //List to contain the sort options.
   List<DropdownMenuItem<String>> get options {
     List<DropdownMenuItem<String>> dropdownList = [
       const DropdownMenuItem(value: "Default", child: Text("Default")),
@@ -28,6 +30,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
 
   Dio dio = Dio();
   OnlineService onlineService = OnlineService();
+  //Gets the list of books using the API.
   Future<List<dynamic>> getRequest() async {
     final rp = await dio.get(onlineService.booksUrl);
     List<Map<String, dynamic>> books = (rp.data['books'] as List).map((e) => e as Map<String, dynamic>).toList();
@@ -41,6 +44,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
     super.initState();
   }
 
+  //Gets the original list obtained from the GET request.
   Future<void> originalList() async {
     await Future.delayed(const Duration(seconds: 1));
     setState(() {
@@ -48,56 +52,26 @@ class _MyBooksListPageState extends State<BooksListPage> {
     });
   }
 
-  //Sorts the list in descending order
+  //Sorts the list in descending order.
   Future<List<dynamic>> sortAlphaDesc() async {
     List<dynamic> rl = await requestedList;
-    //Map mrl = rl.asMap();
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-      //MapEntry<int, dynamic> entryA = a;
-      //MapEntry<int, dynamic> entryB = b;
-      return b.value["title"].compareTo(a.value["title"]);
-      //return a.value.compareTo(b.value);
-    });
+              return b.value["title"].compareTo(a.value["title"]);
+            });
     return listToSort;
-    /*
-    listToSort.sort((a, b) {
-      return a['books']['title'].toLowerCase().compareTo(b['books']['title'].toLowerCase());
-    });
-    return listToSort;
-    */
-    /*
-    setState(() {
-      requestedList = listToSort;
-    });
-    */
   }
 
-  //Sorts the list in ascending order
+  //Sorts the list in ascending order.
   Future<List<dynamic>> sortAlphaAsc() async {
     List<dynamic> rl = await requestedList;
-    //Map mrl = rl.asMap();
     Map mrl = Map.fromIterable(rl, key: (item) => rl.indexOf(item));
     List<dynamic> listToSort = mrl.entries.toList()..sort(
             (a, b) {
-      //MapEntry<dynamic, dynamic> entryA = a;
-      //MapEntry<dynamic, dynamic> entryB = b;
       return a.value["title"].compareTo(b.value["title"]);
-      //return a.value.compareTo(b.value);
     });
     return listToSort;
-    /*
-    listToSort.sort((a, b) {
-      return a['books']['title'].toLowerCase().compareTo(b['books']['title'].toLowerCase());
-    });
-    return listToSort;
-    */
-    /*
-    setState(() {
-      requestedList = listToSort;
-    });
-    */
   }
 
   @override
@@ -113,6 +87,7 @@ class _MyBooksListPageState extends State<BooksListPage> {
               }
           ),
           actions: [
+            //Alert dialog to display the sorting options.
             TextButton(
               onPressed: () {
                 showDialog(
@@ -124,14 +99,8 @@ class _MyBooksListPageState extends State<BooksListPage> {
                         value: selectedValue,
                         items: options,
                         onChanged: (String? value) {
-                          //selectedValue = value!.toString();
                           setState(() {
                             selectedValue = value!.toString();
-                            /*
-                            String selectedValue = "Default";
-                            String alphaDesc = "Alphabetically (Descending)";
-                            String alphaAsc = "Alphabetically (Ascending)";
-                            */
                             switch (value) {
                               case "Default":
                                 originalList();
@@ -176,26 +145,28 @@ class _MyBooksListPageState extends State<BooksListPage> {
               future: requestedList,
               builder: (BuildContext ctx, AsyncSnapshot snapshot) {
                 if (snapshot.data == null) {
+                  //Displays an error to indicate that the API is currently not available.
                   return Container(
                     child: const Center(
-                      //child: CircularProgressIndicator(),
                       child: Text("Database currently not available"),
                     ),
                   );
                 } else if (snapshot.hasError && snapshot.error is SocketException) {
+                  //Displays an error to indicate that the user is currently disconnected from the Internet.
                   return Container(
                     child: const Center(
                       child: Text("Please connect to the Internet"),
                     ),
                   );
                 } else {
+                  //Displays a list of books.
                   return GridView.builder(
                     itemCount: snapshot.data!.length,
                     itemBuilder: (ctx, index) => Card(
                       child: SizedBox.square(
                         dimension: 45,
                         child: ListTile(
-                          //
+                          //Redirects the user to the book information page.
                           title: ElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -217,12 +188,10 @@ class _MyBooksListPageState extends State<BooksListPage> {
                               },
                             style: ElevatedButton.styleFrom(
                               shape: const ContinuousRectangleBorder(),
-                              //backgroundColor: Colors.grey.shade50,
                               minimumSize: const Size.fromHeight(50),
                             ),
                             child: Text(snapshot.data![index]['title']),
                           ),
-                          //
                         ),
                       ),
                     ),
